@@ -7,7 +7,7 @@
 The goals for this summer are as follows:
 
 ```
-1. Absolute Positoning.
+1. Absolute Positioning.
 2. Strafing.
 3. Moving to a coordinate.
 4. Tune the movement to be fast, accurate, and precise.
