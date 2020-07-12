@@ -14,7 +14,7 @@ using namespace vex;
 void opControl(){
   task debugPrint(updateScreen); //gg
   int *p;
-
+/*
   movAb(-22.5, 50, 0, 2000);
   movAb(-22.5, 35, 0, 2000);
   movAb(-3, 50, 30, 2000);
@@ -25,7 +25,7 @@ void opControl(){
   movAb(14, 13, -180, 2000);
   movAb(14, 7, -180, 2000);
   movAb(68, 7, -225, 2000);
-
+*/
 
   while(1){
     driveX();
