@@ -12,7 +12,7 @@
 using namespace vex;
 
 void opControl(){
-  task debugPrint(updateScreen);
+  task debugPrint(updateScreen); //gg
   int *p;
 
   movAb(-22.5, 50, 0, 2000);
