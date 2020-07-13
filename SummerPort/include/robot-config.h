@@ -15,6 +15,11 @@ extern encoder leftTracker;
 extern encoder rightTracker;
 extern encoder backTracker;
 
+extern limit incSelect;
+extern limit decSelect;
+
+extern inertial gyroM;
+
 extern float wheelRadius; //JK its diameter
 extern double wheelCir;
 extern double pi;
@@ -30,6 +35,8 @@ extern float xPos;
 extern float yPos;
 extern float angleD;
 extern float angleR;
+
+extern int autonSelect;
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
  * 

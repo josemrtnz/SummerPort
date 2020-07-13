@@ -170,64 +170,64 @@ int turningCap(double distanceMag){
 void betterPID(){
   if(fabs(vectorD[0])>39.0){
     xkP = 1000;
-    xkD = 0;
+    xkD = 1;
     xkI = 1.2; 
     xCap = 1100;
   }else if(fabs(vectorD[0])>30.0){
     xkP = 1000;
-    xkD = 0;
+    xkD = 1;
     xkI = 0.8; 
     xCap = 1200;
   } else if(fabs(vectorD[0])>20.0){
     xkP = 1200;
-    xkD = 0;
+    xkD = 1;
     xkI = 0.9; 
     xCap = 2000;
   } else if(fabs(vectorD[0])>10.0){
     xkP = 1300;
-    xkD = 0;
+    xkD = 1;
     xkI = 0.7; 
     xCap = 2000;
   } else if(fabs(vectorD[0])>5.0){
     xkP = 1600;
-    xkD = 0;
+    xkD = 1;
     xkI = 0.5; 
     xCap = 2000;
   } else {
     xkP = 3500;
-    xkD = 0;
+    xkD = 1;
     xkI = 1.2; 
     xCap = 2000;
   }
 
   if(fabs(vectorD[1])>39.0){
     ykP = 1000;
-    ykD = 0;
+    ykD = 1;
     ykI = 1.2;
     yCap = 1100;
   }else if(fabs(vectorD[1])>30.0){
     ykP = 1000;
-    ykD = 0;
+    ykD = 1;
     ykI = .8;
     yCap = 1200;
   } else if(fabs(vectorD[1])>20.0){
     ykP = 1200;
-    ykD = 0;
+    ykD = 1;
     ykI = 0.9;
     yCap = 2000;
   } else if(fabs(vectorD[1])>10.0){
     ykP = 1300;
-    ykD = 0;
+    ykD = 1;
     ykI = 0.7;
     yCap = 2000;
   } else if(fabs(vectorD[1])>5.0){
     ykP = 1600;
-    ykD = 0;
+    ykD = 1;
     ykI = 0.5;
     yCap = 2000;
   } else {
     ykP = 3500;
-    ykD = 0;
+    ykD = 1;
     ykI = 1.2;
     yCap = 2000;
   }

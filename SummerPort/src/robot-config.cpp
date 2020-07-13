@@ -18,7 +18,12 @@ encoder leftTracker = encoder(Brain.ThreeWirePort.A);
 encoder rightTracker = encoder(Brain.ThreeWirePort.G);
 encoder backTracker = encoder(Brain.ThreeWirePort.C);
 
-float wheelRadius = 3.0; //JK its diameter
+limit incSelect = limit(Brain.ThreeWirePort.E);
+limit decSelect = limit(Brain.ThreeWirePort.F);
+
+inertial gyroM(PORT20);
+
+float wheelRadius = 3; //JK its diameter 2.785
 double pi = 3.14159265359; // (355/113) pi aproximation
 double wheelCir = wheelRadius*pi;
 float sL = 6.75;
@@ -32,6 +37,8 @@ float xPos = 0;
 float yPos = 0;
 float angleD = 0;
 float angleR = 0;
+
+int autonSelect = 0;
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
  * 
@@ -42,7 +49,15 @@ void vexcodeInit( void ) {
   leftTracker.resetRotation();
   rightTracker.resetRotation();
   backTracker.resetRotation();
-  wait(1000, msec);
+
+  wait(500, msec);
+  gyroM.calibrate();
+  while(gyroM.isCalibrating()){
+    wait(50, msec);
+  }
+
   printf("%.0lf, %.0lf, %.0lf \n", leftTracker.position(deg), rightTracker.position(deg), backTracker.position(deg));
   task trackingP(trackingPylons);
+
+  
 }
