@@ -41,6 +41,9 @@ void opControl(){
 
   movAb(71, 9, -200, 2000);
 
+  movAb(-20, 25, 0, 3500);
+  movAb(-5, 0, 0, 2000);
+
   while(1){
 
     if(chungus) driveXA();
@@ -50,8 +53,7 @@ void opControl(){
     else if(Controller1.ButtonL2.pressing()) chungus = false;
 
     if(Controller1.ButtonB.pressing()){ 
-        movAb(-20, 25, 0, 3500);
-        movAb(-5, 0, 0, 2000);
+        movAb(1, 1, 0, 2000);
       }
     if(Controller1.ButtonA.pressing()){
       debugPrint.suspend();
