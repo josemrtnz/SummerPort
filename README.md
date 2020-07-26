@@ -7,12 +7,12 @@
 The goals for this summer are as follows:
 
 ```
-1. Absolute Positioning.
-2. Strafing.
-3. Moving to a coordinate.
-4. Tune the movement to be fast, accurate, and precise.
-5. Turn while moving a distance.
-6. Arc turns.
+1. [x] Absolute Positioning.
+2. [x] Strafing.
+3. [x] Moving to a coordinate.
+4. [x] Tune the movement to be fast, accurate, and precise. *Improvements can be made here*
+5. [x] Turn while moving a distance.
+6. [ ] Arc turns.
 ```
 
 ## Built With
