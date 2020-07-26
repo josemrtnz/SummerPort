@@ -11,6 +11,9 @@ extern motor frontLeft;
 extern motor backLeft;
 extern motor backRight;
 
+extern motor leftIntake;
+extern motor rightIntake;
+
 extern encoder leftTracker;
 extern encoder rightTracker;
 extern encoder backTracker;
@@ -20,7 +23,7 @@ extern limit decSelect;
 
 extern inertial gyroM;
 
-extern float wheelRadius; //JK its diameter
+extern float wheelRadius; //JK it's diameter
 extern double wheelCir;
 extern double pi;
 

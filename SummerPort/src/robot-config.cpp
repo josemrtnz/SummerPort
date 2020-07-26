@@ -9,10 +9,13 @@ competition Comp;
 // VEXcode device constructors
 controller Controller1 = controller(primary);
 
-motor frontRight = motor(PORT4, ratio18_1, false);
-motor frontLeft = motor(PORT1, ratio18_1, false);
-motor backLeft = motor(PORT2, ratio18_1, false);
-motor backRight = motor(PORT3, ratio18_1, false);
+motor frontRight = motor(PORT2, ratio18_1, false);
+motor frontLeft = motor(PORT3, ratio18_1, false);
+motor backLeft = motor(PORT4, ratio18_1, false);
+motor backRight = motor(PORT1, ratio18_1, false);
+
+motor leftIntake = motor(PORT6, ratio18_1, false);
+motor rightIntake = motor(PORT5, ratio18_1, false);
 
 encoder leftTracker = encoder(Brain.ThreeWirePort.A);
 encoder rightTracker = encoder(Brain.ThreeWirePort.G);
