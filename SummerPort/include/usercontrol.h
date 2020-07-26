@@ -3,4 +3,5 @@
 
 void driveX();
 void driveXA();
+void intakeX();
 int * enterCoor();

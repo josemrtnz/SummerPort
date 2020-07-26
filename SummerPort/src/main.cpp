@@ -18,31 +18,31 @@ void opControl(){
   task debugPrint(updateScreen); //gg
   int *p;
 
-  movAb(-22.5, 50, 0, 3500);
-  movAb(-22.5, 35, 0, 1500);
-  movAb(-3, 50, 30, 2000);
+  updateTargetPos(-22.5, 50, 0);
+  updateTargetPos(-22.5, 35, 0);
+  updateTargetPos(-3, 50, 30);
 
-  movAb(-43, 51, -30, 4000);
+  updateTargetPos(-43, 51, -30);
 
-  movAb(-30, 21, -120, 2000);
-  movAb(-40, 11, -120, 2000);
+  updateTargetPos(-30, 21, -120);
+  updateTargetPos(-40, 11, -120);
 
-  movAb(10, 12, -90, 1000);
+  updateTargetPos(10, 12, -90);
 
-  movAb(14, 14, -180, 2000);
+  updateTargetPos(14, 14, -180);
 
-  movAb(14, 11, -180, 1000);
+  updateTargetPos(14, 11, -180);
 
-  movAb(14, 20, -180, 1500);
+  updateTargetPos(14, 20, -180);
 
-  movAb(25, 20, -90, 1200);
+  updateTargetPos(25, 20, -90);
 
-  movAb(68, 20, -200, 4000);
+  updateTargetPos(68, 20, -200);
 
-  movAb(71, 9, -200, 2000);
+  updateTargetPos(71, 9, -200);
 
-  movAb(-20, 25, 0, 3500);
-  movAb(-5, 0, 0, 2000);
+  updateTargetPos(-20, 25, 0);
+  updateTargetPos(-5, 0, 0);
 
   while(1){
 
@@ -53,13 +53,13 @@ void opControl(){
     else if(Controller1.ButtonL2.pressing()) chungus = false;
 
     if(Controller1.ButtonB.pressing()){ 
-        movAb(1, 1, 0, 2000);
+        updateTargetPos(1, 1, 0);
       }
     if(Controller1.ButtonA.pressing()){
       debugPrint.suspend();
       p = enterCoor();
       debugPrint.resume();
-      movAb(*p, *(p+1), 0, 2000);
+      updateTargetPos(*p, *(p+1), 0);
     }
 
     wait(30, msec);

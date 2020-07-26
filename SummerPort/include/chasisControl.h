@@ -2,7 +2,8 @@
 #include "vex.h"
 
 void moveDrive(double x, double y, float turn);
-void movAb(float x, float y, int angleO, int timeOut);
+void updateTargetPos(float x, float y, int angleO);
+int autoMain();
 
 extern double vMag;
 extern double vectorD[2];

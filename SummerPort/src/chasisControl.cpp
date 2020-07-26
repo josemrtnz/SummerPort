@@ -44,6 +44,18 @@ int turnCap = 500;
 // ~~~~~~~~~~~
 ////////////////////
 
+////////////////////
+// Robot Settings
+///////////
+
+float targetX = 0;
+float targetY = 0;
+float targetA = 0;
+
+///////////
+// ~~~~~~~~~~~
+////////////////////
+
 // movAb settings
 double vMag;
 double vectorD[2];
@@ -237,58 +249,33 @@ void betterPID(){
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
-void movAb(float x, float y, int angleO, int timeOut){
+void movAb(){
 
-  coastMotor();
-  wait(20, msec);
-  int currTime = Brain.Timer.time(msec);
-
-  vectorD[0] = x - xPos;
-  vectorD[1] = y - yPos;
+  vectorD[0] = targetX - xPos;
+  vectorD[1] = targetY - yPos;
   vMag = sqrt((vectorD[0]*vectorD[0]) + (vectorD[1]*vectorD[1]));
-  betterPID();
 
-  while(true){
+  //////////////////////////////////////////////////
+  // Caps go here
 
-    vectorD[0] = x - xPos;
-    vectorD[1] = y - yPos;
-    vMag = sqrt((vectorD[0]*vectorD[0]) + (vectorD[1]*vectorD[1]));
+  int turnCap = turningCap(vMag);
 
-    //////////////////////////////////////////////////
-    // Caps go here
+  xVoltage = xPID(targetX, xPos);
+  yVoltage = yPID(targetY, yPos);
+  angleVoltage = updateTurnPID(targetA, angleD);
 
-    int turnCap = turningCap(vMag);
+  if(angleVoltage>turnCap) angleVoltage = turnCap;
+  else if(angleVoltage<-turnCap) angleVoltage = -turnCap;
 
-    xVoltage = xPID(x, xPos);
-    yVoltage = yPID(y, yPos);
-    angleVoltage = updateTurnPID(angleO, angleD);
+  if(xVoltage>10000) xVoltage = 10000;
+  else if(xVoltage<-10000) xVoltage = -10000;
 
-    if(angleVoltage>turnCap) angleVoltage = turnCap;
-    else if(angleVoltage<-turnCap) angleVoltage = -turnCap;
+  if(yVoltage>10000) yVoltage = 10000;
+  else if(yVoltage<-10000) yVoltage = -10000;
 
-    if(xVoltage>10000) xVoltage = 10000;
-    else if(xVoltage<-10000) xVoltage = -10000;
+  //////////////////////////////////////////////////
 
-    if(yVoltage>10000) yVoltage = 10000;
-    else if(yVoltage<-10000) yVoltage = -10000;
-
-    //////////////////////////////////////////////////
-
-    moveDrive(xVoltage, yVoltage, -angleVoltage);
-
-    wait(20, msec);
-
-    //PID exits when bot is within 0.25in from target, average motor RPM is less than 10, and angle difference is less than .5 degrees
-    if((vMag < .45 && averageRPM()<5 && fabs(angleO-angleD)<1.0) || (Brain.Timer.time(msec)-currTime)>timeOut) { 
-      xTotalError = 0;
-      yTotalError = 0;
-      turnError = 0;
-      holdMotor();
-      stopMotors();
-      break;
-    }
-
-  }
+  moveDrive(xVoltage, yVoltage, -angleVoltage);  
 }
 //////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -300,5 +287,31 @@ void arcTurn(float x, float y, float angleO, float arcRad){
 
 }
 
+//////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+void updateTargetPos(float x, float y, int angleO){
+  vectorD[0] = x - xPos;
+  vectorD[1] = y - yPos;
+  betterPID();
+
+  targetX = x;
+  targetY = y;
+  targetA = angleO;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////
+int autoMain(){ // This task will control our robot's movement and intake during the autonmous period.
+
+  coastMotor();
+
+  while(true){
+    movAb();
+    task::sleep(20);
+  }
+
+  return 1;
+}
 //////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
