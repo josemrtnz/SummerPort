@@ -32,6 +32,7 @@ void opControl(){
   updateTargetPos(-6, 47.65, 30);
   task::sleep(50);
   waitUntilDistance(vMag/2);
+
   updateIntakePct(100);
   waitUntilSettled();
   updateIntakePct(0);
@@ -40,9 +41,8 @@ void opControl(){
   waitUntilSettled();
 
   updateTargetPos(-43, 48.5, -50);
-  wait(1000, msec);
+  waitUntilDistance(10);
   betterPID();
-  waitUntilSettled();
   updateIntakePct(100);
   waitUntilBalls(2);
   updateIntakePct(0);
