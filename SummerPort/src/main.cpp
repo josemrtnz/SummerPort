@@ -6,7 +6,6 @@
 /*    Description:  V5 project                                                */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
-//your mom 
 #include "vex.h"
 
 using namespace vex;
@@ -15,51 +14,93 @@ int prevA = 0;
 bool chungus = true;
 
 void opControl(){
-  task debugPrint(updateScreen); //gg
+  //task debugPrint(updateScreen); //gg
   int *p;
 
-  updateTargetPos(-22.5, 50, 0);
-  updateTargetPos(-22.5, 35, 0);
-  updateTargetPos(-3, 50, 30);
+  task autoStart(autoMain);
 
-  updateTargetPos(-43, 51, -30);
+  updateTargetPos(-26, 52, 0);
+  waitUntilDistance(20.0);
+  updateIntakePct(100);
+  waitUntilSettled();
+  updateIntakePct(0);
+  
+  updateTargetPos(-26, 30, 0);
+  waitUntilSettled();
+  
 
+  updateTargetPos(-6, 47.65, 30);
+  task::sleep(50);
+  waitUntilDistance(vMag/2);
+  updateIntakePct(100);
+  waitUntilSettled();
+  updateIntakePct(0);
+  
+  updateTargetPos(-26, 30, 0);
+  waitUntilSettled();
+
+  updateTargetPos(-43, 48.5, -50);
+  wait(1000, msec);
+  betterPID();
+  waitUntilSettled();
+  updateIntakePct(100);
+  waitUntilBalls(2);
+  updateIntakePct(0);
+
+  /*
   updateTargetPos(-30, 21, -120);
+  waitUntilSettled();
   updateTargetPos(-40, 11, -120);
+  waitUntilSettled();
 
   updateTargetPos(10, 12, -90);
+  waitUntilSettled();
 
   updateTargetPos(14, 14, -180);
+  waitUntilSettled();
 
   updateTargetPos(14, 11, -180);
+  waitUntilSettled();
 
   updateTargetPos(14, 20, -180);
+  waitUntilSettled();
 
   updateTargetPos(25, 20, -90);
+  waitUntilSettled();
 
   updateTargetPos(68, 20, -200);
+  waitUntilSettled();
 
   updateTargetPos(71, 9, -200);
+  waitUntilSettled();
 
   updateTargetPos(-20, 25, 0);
+  waitUntilSettled();
   updateTargetPos(-5, 0, 0);
+  waitUntilSettled();
+  */
+  autoStart.stop();
 
   while(1){
 
     if(chungus) driveXA();
     else driveX();
 
+    intakeX();
+
     if(Controller1.ButtonL1.pressing()) chungus = true;
     else if(Controller1.ButtonL2.pressing()) chungus = false;
 
     if(Controller1.ButtonB.pressing()){ 
         updateTargetPos(1, 1, 0);
+        waitUntilSettled();
       }
     if(Controller1.ButtonA.pressing()){
-      debugPrint.suspend();
+      //debugPrint.suspend();
       p = enterCoor();
-      debugPrint.resume();
+      //debugPrint.resume();
       updateTargetPos(*p, *(p+1), 0);
+      waitUntilSettled();
     }
 
     wait(30, msec);
@@ -72,9 +113,10 @@ void autonM(){
 
 void disabledR(){
   int max = 2;
+  /*
   if(incSelect) autonSelect++;
   else if(decSelect) autonSelect--;
-
+  */
   if(autonSelect == -1) autonSelect=max;
   if(autonSelect == max+1) autonSelect=0;
 

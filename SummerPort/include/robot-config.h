@@ -18,8 +18,10 @@ extern encoder leftTracker;
 extern encoder rightTracker;
 extern encoder backTracker;
 
-extern limit incSelect;
-extern limit decSelect;
+//extern limit incSelect;
+//extern limit decSelect;
+
+extern line ballDetector;
 
 extern inertial gyroM;
 

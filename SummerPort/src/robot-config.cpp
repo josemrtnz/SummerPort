@@ -14,24 +14,26 @@ motor frontLeft = motor(PORT3, ratio18_1, false);
 motor backLeft = motor(PORT4, ratio18_1, false);
 motor backRight = motor(PORT1, ratio18_1, false);
 
-motor leftIntake = motor(PORT6, ratio18_1, false);
+motor leftIntake = motor(PORT6, ratio18_1, true);
 motor rightIntake = motor(PORT5, ratio18_1, false);
 
 encoder leftTracker = encoder(Brain.ThreeWirePort.A);
 encoder rightTracker = encoder(Brain.ThreeWirePort.G);
 encoder backTracker = encoder(Brain.ThreeWirePort.C);
 
-limit incSelect = limit(Brain.ThreeWirePort.E);
-limit decSelect = limit(Brain.ThreeWirePort.F);
+//limit incSelect = limit(Brain.ThreeWirePort.E);
+//limit decSelect = limit(Brain.ThreeWirePort.F);
+
+line ballDetector = line(Brain.ThreeWirePort.F);
 
 inertial gyroM(PORT20);
 
-float wheelRadius = 3; //JK its diameter 2.785
+float wheelRadius = 2.85; //JK its diameter 2.785
 double pi = 3.14159265359; // (355/113) pi aproximation
 double wheelCir = wheelRadius*pi;
-float sL = 6.75;
-float sR = 6.75;
-float sS = 9;
+float sL = 7.375;
+float sR = 7.375;
+float sS = 8;
 
 float frblWheels = 2.35619449;
 float flbrWheels = 0.7853981634;

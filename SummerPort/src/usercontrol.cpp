@@ -41,9 +41,14 @@ void intakeX(){
   if(Controller1.ButtonR1.pressing()){
     leftIntake.spin(fwd, 100, percentUnits::pct);
     rightIntake.spin(fwd, 100, percentUnits::pct);
+    printf("Line %ld \n", ballDetector.value(pct));
   } else if(Controller1.ButtonR2.pressing()){
     leftIntake.spin(fwd, -100, percentUnits::pct);
     rightIntake.spin(fwd, -100, percentUnits::pct);
+    printf("Line %ld \n", ballDetector.value(pct));
+  } else {
+    leftIntake.spin(fwd, 0, percentUnits::pct);
+    rightIntake.spin(fwd, 0, percentUnits::pct);
   }
 }
 //////////////////////////////////////

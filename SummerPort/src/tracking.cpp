@@ -89,8 +89,10 @@ int updateScreen(){
     Controller1.Screen.print("Angle: %.1f°    ", angleD);
     //Controller1.Screen.print("Drive mV: %.0lf");
     printf(" Distance: %.2lf Y Voltage: %.0f X Voltage: %.0f\n", vMag, yVoltage, xVoltage);
-    printf("Tracking Wheels Angle: %0.f   IMU angle: %0.lf", angleD, gyroM.rotation());
+    printf("Tracking Wheels Angle: %0.f   IMU angle: %0.lf\n", angleD, gyroM.rotation());
+    printf("rightTW: %.0lf, leftTW: %.0lf, backTW: %.0lf\n", rightTracker.position(deg), leftTracker.position(deg), backTracker.position(deg));
     //Delays task so it does not hog all resources
+    printf("Line: %ld \n \n \n \n \n", ballDetector.value(pct));
     task::sleep(150 - (Brain.Timer.time(msec)-loopTime));
   }
 
