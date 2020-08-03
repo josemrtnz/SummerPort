@@ -18,7 +18,7 @@ void opControl(){
   int *p;
 
   task autoStart(autoMain);
-
+  
   updateTargetPos(-26, 52, 0);
   waitUntilDistance(20.0);
   updateIntakePct(100);
@@ -29,7 +29,7 @@ void opControl(){
   waitUntilSettled();
   
 
-  updateTargetPos(-6, 47.65, 30);
+  updateTargetPos(-5, 50, 35);
   task::sleep(50);
   waitUntilDistance(vMag/2);
 
@@ -40,39 +40,63 @@ void opControl(){
   updateTargetPos(-26, 30, 0);
   waitUntilSettled();
 
-  updateTargetPos(-43, 48.5, -50);
+  updateTargetPos(-41, 48, -40);
   waitUntilDistance(10);
   betterPID();
   updateIntakePct(100);
-  waitUntilBalls(2);
+  //waitUntilBalls(2);
+  task::sleep(2000);
+  updateIntakePct(0);
+
+  
+  updateTargetPos(-30, 20, -150);
+  waitUntilDistance(25);
+  updateIntakePct(-100);
+  task::sleep(750);
+  updateIntakePct(0);
+  waitUntilDistance(5);
+  updateIntakePct(100);
+  updateTargetPos(-42, 6, -150);
+  task::sleep(2000);
+  updateIntakePct(0);
+
+
+  updateTargetPos(0, 30, -90);
+  waitUntilDistance(30);
+  updateIntakePct(-100);
+  task::sleep(750);
+  updateIntakePct(0);
+
+  updateTargetPos(12, 22, -180);
+  waitUntilSettled();
+
+  
+  updateTargetPos(12, 12, -180);
+  updateIntakePct(100);
+  task::sleep(2000);
+  updateIntakePct(0);
+
+  
+  updateTargetPos(12, 20, -180);
+  waitUntilDistance(2);
+
+  
+  updateTargetPos(40, 30, -90);
+  waitUntilDistance(15);
+  updateIntakePct(-100);
+  task::sleep(750);
+  updateIntakePct(0);
+
+  updateTargetPos(65, 30, -200);
+  waitUntilSettled();
+  
+
+  updateTargetPos(67, 11, -200);
+  updateIntakePct(100);
+  task::sleep(2000);
   updateIntakePct(0);
 
   /*
-  updateTargetPos(-30, 21, -120);
-  waitUntilSettled();
-  updateTargetPos(-40, 11, -120);
-  waitUntilSettled();
-
-  updateTargetPos(10, 12, -90);
-  waitUntilSettled();
-
-  updateTargetPos(14, 14, -180);
-  waitUntilSettled();
-
-  updateTargetPos(14, 11, -180);
-  waitUntilSettled();
-
-  updateTargetPos(14, 20, -180);
-  waitUntilSettled();
-
-  updateTargetPos(25, 20, -90);
-  waitUntilSettled();
-
-  updateTargetPos(68, 20, -200);
-  waitUntilSettled();
-
-  updateTargetPos(71, 9, -200);
-  waitUntilSettled();
 
   updateTargetPos(-20, 25, 0);
   waitUntilSettled();
