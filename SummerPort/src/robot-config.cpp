@@ -64,5 +64,5 @@ void vexcodeInit( void ) {
   printf("%.0lf, %.0lf, %.0lf \n", leftTracker.position(deg), rightTracker.position(deg), backTracker.position(deg));
   task trackingP(trackingPylons);
 
-  
+
 }

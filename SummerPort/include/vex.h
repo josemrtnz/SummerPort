@@ -15,10 +15,11 @@
 #include "v5.h"
 #include "v5_vcs.h"
 
+#include "chasiscontrol.h"
 #include "robot-config.h"
-#include "tracking.h"
 #include "usercontrol.h"
-#include "chasisControl.h"
+#include "autonpaths.h"
+#include "tracking.h"
 
 #define waitUntil(condition)                                                   \
   do {                                                                         \

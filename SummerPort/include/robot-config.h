@@ -40,7 +40,6 @@ extern float xPos;
 extern float yPos;
 extern float angleD;
 extern float angleR;
-
 extern int autonSelect;
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

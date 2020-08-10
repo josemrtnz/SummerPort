@@ -2,7 +2,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
-void driveX(){
+void userControl::driveX(){
 
   int a3 = Controller1.Axis3.position(pct) * 120;
   int a4 = Controller1.Axis4.position(pct) * 120;
@@ -19,7 +19,7 @@ void driveX(){
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
-void driveXA(){
+void userControl::driveXA(){
 
   int a3 = Controller1.Axis3.position(pct) * 120;
   int a4 = Controller1.Axis4.position(pct) * 120;
@@ -37,7 +37,7 @@ void driveXA(){
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
-void intakeX(){
+void userControl::intakeX(){
   if(Controller1.ButtonR1.pressing()){
     leftIntake.spin(fwd, 100, percentUnits::pct);
     rightIntake.spin(fwd, 100, percentUnits::pct);

@@ -1,7 +1,12 @@
 #pragma once
 #include "vex.h"
 
-void driveX();
-void driveXA();
-void intakeX();
+class userControl{
+  public:
+    userControl(){};
+    void driveX();
+    void driveXA();
+    void intakeX();
+};
+
 int * enterCoor();

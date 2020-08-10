@@ -1,74 +1,45 @@
 #include "chasisControl.h"
 
-////////////////////
-// PID Settings
-///////////
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////
+chasisControl::chasisControl(float of, float sc){
+  offset = of;
+  scalar = sc;
 
-// x PID Settings
-float xkP = 0; //1100
-float xkD = 0; //20
-float xkI = 0; //0
+  xPID.kI = 0;
+  xPID.kD = 0;
+  xPID.kP = 0;
+  xPID.derivative = 0;
+  xPID.error = 0;
+  xPID.prevError = 0;
+  xPID.totalError = 0;
+  xPID.cap = 2000;
 
-float xError = 0; // EnvoderValue - Desired Value (The further you are from your target the bigger this number will be)
-float xPrevError = 0; // EncoderValue 20ms ago
-float xDerivative = 0; // error - previousError : Speed
-float xTotalError = 0; // totalError + error
-int xCap = 2000;
-///////////
+  yPID.kI = 0;
+  yPID.kD = 0;
+  yPID.kP = 0;
+  yPID.derivative = 0;
+  yPID.error = 0;
+  yPID.prevError = 0;
+  yPID.totalError = 0;
+  yPID.cap = 2000;
 
-// y PID Settings
-float ykP = 0; //1100
-float ykD = 0; //10
-float ykI = 0; //0
-
-float yError = 0; // EnvoderValue - Desired Value (The further you are from your target the bigger this number will be)
-float yPrevError = 0; // EncoderValue 20ms ago
-float yDerivative = 0; // error - previousError : Speed
-float yTotalError = 0; // totalError + error
-int yCap = 2000;
-///////////
-
-// Turn PID Settings
-float turnkP = 280; //150
-float turnkD = 0; //700
-float turnkI = 0.75; //4
-
-float turnError = 0; // EnvoderValue - Desired Value (The further you are from your target the bigger this number will be)
-float turnPrevError = 0; // EncoderValue 20ms ago
-float turnDerivative = 0; // error - previousError : Speed
-float turnTotalError = 0; // totalError + error
-int turnCap = 500;
-///////////////////
-
-///////////
-// ~~~~~~~~~~~
-////////////////////
-
-////////////////////
-// Robot Settings
-///////////
-
-float targetX = 0;
-float targetY = 0;
-float targetA = 0;
-int intakePct = 0;
-
-///////////
-// ~~~~~~~~~~~
-////////////////////
-
-// movAb settings
-double vMag;
-double vectorD[2];
-float xVoltage;
-float yVoltage;
-float angleVoltage;
-///////////////////
+  turnPID.kI = 0.75;
+  turnPID.kD = 0;
+  turnPID.kP = 280;
+  turnPID.derivative = 0;
+  turnPID.error = 0;
+  turnPID.prevError = 0;
+  turnPID.totalError = 0;
+  turnPID.cap = 500;
+}
+//////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
 // Controlls all motors in all directions
-void moveDrive(double x, double y, float turn){
+void chasisControl::moveDrive(double x, double y, float turn){
   frontLeft.spin( fwd, (x*cos(flbrWheels-angleR) + y*sin(flbrWheels-angleR)) + turn, voltageUnits::mV);
   frontRight.spin(fwd, -(x*cos(frblWheels-angleR) + y*sin(frblWheels-angleR)) + turn, voltageUnits::mV);
   backLeft.spin(fwd, (x*cos(frblWheels-angleR) + y*sin(frblWheels-angleR)) + turn, voltageUnits::mV);
@@ -80,7 +51,7 @@ void moveDrive(double x, double y, float turn){
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
 // Sets each of the drive motors to the coast brake mode
-void coastMotor(){
+void chasisControl::coastMotor(){
   frontLeft.setBrake(coast);
   frontRight.setBrake(coast);
   backLeft.setBrake(coast);
@@ -92,7 +63,7 @@ void coastMotor(){
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
 // Sets each of the drive motors to the hold brake mode
-void holdMotor(){
+void chasisControl::holdMotor(){
   frontLeft.setBrake(hold);
   frontRight.setBrake(hold);
   backLeft.setBrake(hold);
@@ -104,7 +75,7 @@ void holdMotor(){
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
 
-void stopMotors(){
+void chasisControl::stopMotors(){
   frontLeft.stop();
   frontRight.stop();
   backLeft.stop();
@@ -117,7 +88,7 @@ void stopMotors(){
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
 // Gets the average RPM of all the drive motors.
-int averageRPM(){
+int chasisControl::averageRPM(){
   return (fabs(frontRight.velocity(rpm)) + fabs(frontLeft.velocity(rpm)) + fabs(backRight.velocity(rpm)) + fabs(backLeft.velocity(rpm)))/4;
 }
 //////////////////////////////////////
@@ -125,52 +96,22 @@ int averageRPM(){
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
-double xPID(double inchTarget, double currentInch){
-  xError = currentInch - inchTarget;
-  xDerivative = xError - xPrevError;
-  xTotalError += xError;
+double chasisControl::updatePID(double targetG, double currentG, PIDsettings boi){
+  boi.error = currentG - targetG;
+  boi.derivative = boi.error - boi.prevError;
+  boi.totalError += boi.error;
 
-  if((xTotalError*xkI)>xCap) xTotalError = xCap/xkI;
-  else if((xTotalError*xkI)<-xCap) xTotalError = -xCap/xkI;
+  if((boi.totalError*boi.kI)>boi.cap) boi.totalError = boi.cap/boi.kI;
+  else if((boi.totalError*boi.kI)<-boi.cap) boi.totalError = -boi.cap/boi.kI;
 
-  return -(xkP*xError + xkD*xDerivative + xkI*xTotalError);
+  return -(boi.kP*boi.error + boi.kD*boi.derivative + boi.kI*boi.totalError);
 }
 //////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
-double yPID(double inchTarget, double currentInch){
-  yError = currentInch - inchTarget;
-  yDerivative = yError - yPrevError;
-  yTotalError += yError;
-
-  if((yTotalError*ykI)>yCap) yTotalError = yCap/ykI;
-  else if((yTotalError*ykI)<-yCap) yTotalError = -yCap/ykI;
-
-  return -(ykP*yError + ykD*yDerivative + ykI*yTotalError);
-}
-//////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////
-double updateTurnPID(float angleTarget, float currentAngle){
-  turnError = currentAngle - angleTarget;
-  turnDerivative = turnError - turnPrevError;
-  turnTotalError += turnError;
-
-  if((turnTotalError*turnkI)>turnCap) turnTotalError = turnCap/turnkI;
-  else if((turnTotalError*turnkI)<-turnCap) turnTotalError = -turnCap/turnkI;
-
-  return (turnkP*turnError + turnkD*turnDerivative + turnkI*turnTotalError);
-}
-//////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////
-int turningCap(double distanceMag){
+int chasisControl::turningCap(double distanceMag){
   if(distanceMag>30.0) return 2000;
   else if(distanceMag<10.0) return 6000;
   else return (-200*distanceMag) + 8000;
@@ -180,69 +121,69 @@ int turningCap(double distanceMag){
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
-void betterPID(){
+void chasisControl::betterPID(){
   if(fabs(vectorD[0])>39.0){
-    xkP = 1000;
-    xkD = 1;
-    xkI = 1.2; 
-    xCap = 1100;
+    xPID.kP = 1000;
+    xPID.kD = 1;
+    xPID.kI = 1.2; 
+    xPID.cap = 1100;
   }else if(fabs(vectorD[0])>30.0){
-    xkP = 1000;
-    xkD = 1;
-    xkI = 0.8; 
-    xCap = 1200;
+    xPID.kP = 1000;
+    xPID.kD = 1;
+    xPID.kI = 0.8; 
+    xPID.cap = 1200;
   } else if(fabs(vectorD[0])>20.0){
-    xkP = 1200;
-    xkD = 1;
-    xkI = 0.9; 
-    xCap = 2000;
+    xPID.kP = 1200;
+    xPID.kD = 1;
+    xPID.kI = 0.9; 
+    xPID.cap = 2000;
   } else if(fabs(vectorD[0])>10.0){
-    xkP = 1300;
-    xkD = 1;
-    xkI = 0.7; 
-    xCap = 2000;
+    xPID.kP = 1300;
+    xPID.kD = 1;
+    xPID.kI = 0.7; 
+    xPID.cap = 2000;
   } else if(fabs(vectorD[0])>5.0){
-    xkP = 1600;
-    xkD = 1;
-    xkI = 0.5; 
-    xCap = 2000;
+    xPID.kP = 1600;
+    xPID.kD = 1;
+    xPID.kI = 0.5; 
+    xPID.cap = 2000;
   } else {
-    xkP = 3500;
-    xkD = 1;
-    xkI = 1.2; 
-    xCap = 2000;
+    xPID.kP = 3500;
+    xPID.kD = 1;
+    xPID.kI = 1.2; 
+    xPID.cap = 2000;
   }
 
   if(fabs(vectorD[1])>39.0){
-    ykP = 1000;
-    ykD = 1;
-    ykI = 1.2;
-    yCap = 1100;
+    yPID.kP = 1000;
+    yPID.kD = 1;
+    yPID.kI = 1.2;
+    yPID.cap = 1100;
   }else if(fabs(vectorD[1])>30.0){
-    ykP = 1000;
-    ykD = 1;
-    ykI = .8;
-    yCap = 1200;
+    yPID.kP = 1000;
+    yPID.kD = 1;
+    yPID.kI = .8;
+    yPID.cap = 1200;
   } else if(fabs(vectorD[1])>20.0){
-    ykP = 1200;
-    ykD = 1;
-    ykI = 0.9;
-    yCap = 2000;
+    yPID.kP = 1200;
+    yPID.kD = 1;
+    yPID.kI = 0.9;
+    yPID.cap = 2000;
   } else if(fabs(vectorD[1])>10.0){
-    ykP = 1300;
-    ykD = 1;
-    ykI = 0.7;
-    yCap = 2000;
+    yPID.kP = 1300;
+    yPID.kD = 1;
+    yPID.kI = 0.7;
+    yPID.cap = 2000;
   } else if(fabs(vectorD[1])>5.0){
-    ykP = 1600;
-    ykD = 1;
-    ykI = 0.5;
-    yCap = 2000;
+    yPID.kP = 1600;
+    yPID.kD = 1;
+    yPID.kI = 0.5;
+    yPID.cap = 2000;
   } else {
-    ykP = 3500;
-    ykD = 1;
-    ykI = 1.2;
-    yCap = 2000;
+    yPID.kP = 3500;
+    yPID.kD = 1;
+    yPID.kI = 1.2;
+    yPID.cap = 2000;
   }
 }
 //////////////////////////////////////
@@ -250,7 +191,7 @@ void betterPID(){
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
-void movAb(){
+void chasisControl::movAb(){
 
   vectorD[0] = targetX - xPos;
   vectorD[1] = targetY - yPos;
@@ -261,9 +202,9 @@ void movAb(){
 
   int turnCap = turningCap(vMag);
 
-  xVoltage = xPID(targetX, xPos);
-  yVoltage = yPID(targetY, yPos);
-  angleVoltage = updateTurnPID(targetA, angleD);
+  xVoltage = updatePID(targetX, xPos, xPID);
+  yVoltage = updatePID(targetY, yPos, yPID);
+  angleVoltage = updatePID(targetA, angleD, turnPID);
 
   if(angleVoltage>turnCap) angleVoltage = turnCap;
   else if(angleVoltage<-turnCap) angleVoltage = -turnCap;
@@ -276,7 +217,7 @@ void movAb(){
 
   //////////////////////////////////////////////////
 
-  moveDrive(xVoltage, yVoltage, -angleVoltage);  
+  moveDrive(xVoltage, yVoltage, angleVoltage);  
 }
 //////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -293,7 +234,7 @@ void arcTurn(float x, float y, float angleO, float arcRad){
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
-void updateTargetPos(float x, float y, int angleO){
+void chasisControl::updateTargetPos(float x, float y, int angleO){
   vectorD[0] = x - xPos;
   vectorD[1] = y - yPos;
   betterPID();
@@ -307,7 +248,7 @@ void updateTargetPos(float x, float y, int angleO){
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
-void updateIntakePct(int pow){
+void chasisControl::updateIntakePct(int pow){
   intakePct = pow;
 }
 //////////////////////////////////////
@@ -315,7 +256,7 @@ void updateIntakePct(int pow){
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
-void intakeMovePct(){
+void chasisControl::intakeMovePct(){
   leftIntake.spin(fwd, intakePct, pct);
   rightIntake.spin(fwd, intakePct, pct);
 }
@@ -325,7 +266,7 @@ void intakeMovePct(){
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
-void waitUntilSettled(){
+void chasisControl::waitUntilSettled(){
   wait(100, msec);
   while(averageRPM() != 0){
     wait(20, msec);
@@ -336,7 +277,7 @@ void waitUntilSettled(){
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
-void waitUntilDistance(float dis){
+void chasisControl::waitUntilDistance(float dis){
   wait(50, msec);
   while(dis < vMag){
     wait(20, msec);
@@ -347,7 +288,7 @@ void waitUntilDistance(float dis){
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
-void waitUntilBalls(int ball){
+void chasisControl::waitUntilBalls(int ball){
   wait(50, msec);
   int ballsIntaken = 0;
   int32_t prevLine = 70;
@@ -368,7 +309,8 @@ void waitUntilBalls(int ball){
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
-int autoMain(){ // This task will control our robot's movement and intake during the autonmous period.
+/*
+void autoMain(){ // This task will control our robot's movement and intake during the autonmous period.
 
   coastMotor();
 
@@ -377,8 +319,6 @@ int autoMain(){ // This task will control our robot's movement and intake during
     intakeMovePct();
     task::sleep(20);
   }
-
-  return 1;
-}
+}*/
 //////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
