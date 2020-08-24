@@ -52,6 +52,14 @@ float targetX = 0;
 float targetY = 0;
 float targetA = 0;
 int intakePct = 0;
+bool isDriveSpline = false;
+tk::spline robotSpline;
+float vectorU[2];
+float splineVoltage[2] = {0,0};
+const int VECTORSPEED = 2500;
+bool rightSpline;
+float splinePosTarget[2];
+double maxMag;
 
 ///////////
 // ~~~~~~~~~~~
@@ -276,18 +284,8 @@ void movAb(){
 
   //////////////////////////////////////////////////
 
-  moveDrive(xVoltage, yVoltage, -angleVoltage);  
+  moveDrive(xVoltage + splineVoltage[0], yVoltage + splineVoltage[1], -angleVoltage);  
 }
-//////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////
-
-void arcTurn(float x, float y, float angleO, float arcRad){
-
-}
-
 //////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -368,11 +366,65 @@ void waitUntilBalls(int ball){
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
+void splineDriveSet(std::vector<double> X, std::vector<double> Y, int angleO, bool right){
+    robotSpline.set_points(X, Y);
+    rightSpline = right;
+    targetA = angleO;
+    if(right){
+      splinePosTarget[0] = X.back();
+      splinePosTarget[1] = Y.back();
+    } else{
+      splinePosTarget[0] = X.front();
+      splinePosTarget[1] = Y.front();
+    }
+    vectorD[0] = 4.0;
+    vectorD[1] = 4.0;
+    betterPID();
+    isDriveSpline = true;
+}
+//////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////
+void splineDrive(){
+  if (fabs(xPos-splinePosTarget[0])<5) {
+    isDriveSpline = false;
+    targetX = splinePosTarget[0];
+    targetY = splinePosTarget[1];
+    betterPID();
+    }
+  splineVoltage[0] = vectorU[0]*VECTORSPEED*0;
+  splineVoltage[1] = vectorU[1]*VECTORSPEED*0;
+  if(rightSpline) {
+    updateTargetPos(xPos+3, robotSpline(xPos+3),targetA);
+  } else 
+  {
+    updateTargetPos(xPos-3, robotSpline(xPos-3),targetA);
+  }
+}
+//////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////
+void updateAngle(int angleO){
+  targetA = angleO;
+}
+//////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////
 int autoMain(){ // This task will control our robot's movement and intake during the autonmous period.
 
   coastMotor();
 
   while(true){
+
+    if(isDriveSpline) splineDrive();
     movAb();
     intakeMovePct();
     task::sleep(20);

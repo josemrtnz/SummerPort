@@ -18,8 +18,19 @@ void opControl(){
   int *p;
 
   task autoStart(autoMain);
-  
-  updateTargetPos(-26, 52, 0);
+
+  std::vector<double> XP = {0, 15, 30};
+  std::vector<double> XY = {0, 20, 0};
+
+  splineDriveSet(XP, XY, -90, true);
+  waitUntilSettled();
+
+  XP = {0, 15, 30};
+  XY = {0, 20, 0};
+
+  splineDriveSet(XP, XY, 0, false);
+  waitUntilSettled();
+  /*updateTargetPos(-26, 52, 0);
   waitUntilDistance(20.0);
   updateIntakePct(100);
   waitUntilSettled();
@@ -96,13 +107,13 @@ void opControl(){
   task::sleep(2000);
   updateIntakePct(0);
 
-  /*
+  
 
   updateTargetPos(-20, 25, 0);
   waitUntilSettled();
   updateTargetPos(-5, 0, 0);
   waitUntilSettled();
-  */
+*/
   autoStart.stop();
 
   while(1){
