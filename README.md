@@ -12,7 +12,7 @@ The goals for this summer are as follows:
 [x] Moving to a coordinate.
 [x] Tune the movement to be fast, accurate, and precise. *Improvements can be made here*
 [x] Turn while moving a distance.
-[ ] Arc turns.
+[x] Arc turns.
 ```
 
 ## Built With
