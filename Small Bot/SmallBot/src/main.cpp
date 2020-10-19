@@ -14,24 +14,22 @@ int prevA = 0;
 bool chungus = true;
 
 void opControl(){
-  //task debugPrint(updateScreen); //gg
+  task debugPrint(updateScreen); //gg
   int *p;
 
   task autoStart(autoMain);
- /*
-  std::vector<double> XP = {0, 15, 30};
-  std::vector<double> XY = {0, 20, 0};
-
-  splineDriveSet(XP, XY, -90, true);
+   
+  /*
+  updateTargetPos(5, 0, 0);
   waitUntilSettled();
-
-  XP = {0, 15, 30};
-  XY = {0, 20, 0};
-
-  splineDriveSet(XP, XY, 0, false);
-  waitUntilSettled();*/
-
-  /*updateTargetPos(-26, 52, 0);
+  updateTargetPos(5, 5, 0);
+  waitUntilSettled();
+  updateTargetPos(0, 5, 0);
+  waitUntilSettled();
+  updateTargetPos(0, 0, 0);
+  waitUntilSettled();
+  
+  updateTargetPos(-26, 52, 0);
   waitUntilDistance(20.0);
   updateIntakePct(100);
   waitUntilSettled();
@@ -117,7 +115,7 @@ void opControl(){
   autoStart.stop();
 
   while(1){
-
+  
     if(chungus) driveXA();
     else driveX();
 
@@ -137,7 +135,7 @@ void opControl(){
       updateTargetPos(*p, *(p+1), 0);
       waitUntilSettled();
     }
-
+    driveX();
     wait(30, msec);
   }
 }
