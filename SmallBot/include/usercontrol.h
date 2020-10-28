@@ -1,7 +1,7 @@
 #pragma once
 #include "vex.h"
 
-void driveX();
-void driveXA();
-void intakeX();
+void driveM();
+void driveMA();
+void intakeM();
 int * enterCoor();

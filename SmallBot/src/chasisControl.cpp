@@ -77,10 +77,10 @@ float angleVoltage;
 //////////////////////////////////////
 // Controlls all motors in all directions
 void moveDrive(double x, double y, float turn){
-  frontLeft.spin( fwd, (x*cos(flbrWheels-angleR) + y*sin(flbrWheels-angleR)) + turn, voltageUnits::mV);
-  frontRight.spin(fwd, -(x*cos(frblWheels-angleR) + y*sin(frblWheels-angleR)) + turn, voltageUnits::mV);
-  backLeft.spin(fwd, (x*cos(frblWheels-angleR) + y*sin(frblWheels-angleR)) + turn, voltageUnits::mV);
-  backRight.spin(fwd, -(x*cos(flbrWheels-angleR) + y*sin(flbrWheels-angleR)) + turn, voltageUnits::mV);
+  frontLeft.spin( fwd, (x*cos(flbrWheels-angleR) + y*sin(flbrWheels-angleR)) - turn, voltageUnits::mV);
+  frontRight.spin(fwd, -(x*cos(frblWheels-angleR) + y*sin(frblWheels-angleR)) - turn, voltageUnits::mV);
+  backLeft.spin(fwd, (x*cos(frblWheels-angleR) + y*sin(frblWheels-angleR)) - turn, voltageUnits::mV);
+  backRight.spin(fwd, -(x*cos(flbrWheels-angleR) + y*sin(flbrWheels-angleR)) - turn, voltageUnits::mV);
 }
 //////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////

@@ -3,8 +3,9 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-//This will be  run as a task so it will always be running in the background
-//and its job is to keep track of where the robot is and it orientation.
+// This will be  run as a task so it will always be running in the background
+// and its job is to keep track of where the robot is and it orientation.
+// xPos, yPos, angleR, and angleR are global variables and every file will have access to them.
 int trackingPylons(){
   double loopTime;
   double deltaL;
@@ -35,6 +36,7 @@ int trackingPylons(){
     float i;
     float h2;
 
+   
     float a = (deltaL - deltaR)/(sL + sR);
 
     if(a){
@@ -71,28 +73,30 @@ int trackingPylons(){
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-//This will be  run as a task so it will always be running in the background
-//and its job is to update the screen with xy coordinates and angle of the bot.
+// This will be  run as a task and its job is to display information about the bot 
+// on the controller, v5 brain, and colsole
 int updateScreen(){
 
-  //Clears the screen.
+  // Clears controller the screen.
   Controller1.Screen.clearScreen();
   double loopTime;
 
   while(true){
     loopTime = Brain.Timer.time(msec);
 
-    //Prints the x and y coordinates and angle the bot is facing to the Controller.
+    // Prints the x and y coordinates and angle the bot is facing to the Controller.
     Controller1.Screen.setCursor(0, 0);
     Controller1.Screen.print("x: %.1fin y: %.1fin     ", xPos, yPos);
     Controller1.Screen.newLine();
     Controller1.Screen.print("Angle: %.1f°    ", angleD);
-    //Controller1.Screen.print("Drive mV: %.0lf");
+    // Controller1.Screen.print("Drive mV: %.0lf");
+
+    // Prints information about the bot to the console
     printf("Distance: %.2lf Y Voltage: %.0f X Voltage: %.0f\n", vMag, yVoltage, xVoltage);
     printf("Tracking Wheels Angle: %0.f   IMU angle: %0.lf\n", angleD, gyroM.rotation());
-    printf("rightTW: %.0lf, leftTW: %.0lf, backTW: %.0lf\n", rightTracker.position(deg), leftTracker.position(deg), backTracker.position(deg));
+    printf("rightTW: %.0lf, leftTW: %.0lf, backTW: %.0lf\n\n\n", rightTracker.position(deg), leftTracker.position(deg), backTracker.position(deg));
+
     //Delays task so it does not hog all resources
-    printf("Line: %ld \n \n \n \n \n", ballDetector.value(pct));
     task::sleep(150 - (Brain.Timer.time(msec)-loopTime));
   }
 
