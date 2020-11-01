@@ -34,12 +34,12 @@ line ballDetector = line(Brain.ThreeWirePort.F);
 // Global instance of the gyro sensor
 inertial gyroM(PORT20);
 
-float wheelDiameter = 2.85; //Tracking Wheel Diameter 2.785
+float wheelDiameter = 3.3; //Tracking Wheel Diameter 2.785
 double pi = 3.14159265359; // (355/113) pi aproximation
 double wheelCir = wheelDiameter*pi; // Tracking Wheel Diameter
-float sL = 2.5; // Distance to tracking center
-float sR = 2.5; // Distance to tracking center
-float sS = 8; // Distance to tracking center
+float sL = 2.3; // Distance to tracking center
+float sR = 2.3; // Distance to tracking center
+float sS = 7.3; // Distance to tracking center
 
 float frblWheels = 2.35619449; // 135 deg in rads
 float flbrWheels = 0.7853981634; // 45 deg in rads
