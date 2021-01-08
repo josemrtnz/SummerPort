@@ -15,7 +15,7 @@ bool chungus = true;
 
 void opControl(){
   //task debugPrint(updateScreen); //gg
-  int *p;
+  //int *p;
 
   task autoStart(autoMain);
  /*
@@ -126,7 +126,7 @@ void opControl(){
     if(Controller1.ButtonL1.pressing()) chungus = true;
     else if(Controller1.ButtonL2.pressing()) chungus = false;
 
-    if(Controller1.ButtonB.pressing()){ 
+    /*if(Controller1.ButtonB.pressing()){ 
         updateTargetPos(1, 1, 0);
         waitUntilSettled();
       }
@@ -136,7 +136,7 @@ void opControl(){
       //debugPrint.resume();
       updateTargetPos(*p, *(p+1), 0);
       waitUntilSettled();
-    }
+    }*/
 
     wait(30, msec);
   }

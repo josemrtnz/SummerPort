@@ -14,7 +14,7 @@ int prevA = 0; // Used for Autonous Selection
 
 void opControl(){ // Driver Controll Function
   task debugPrint(updateScreen); // Starts a task that will print information about the bot to the controller and console.
-  int *p; // A pointer, used for later.
+  //int *p; // A pointer, used for later.
 
   task autoStart(autoMain); // Starts a task that will controll the bot during the autonomous period.
    
