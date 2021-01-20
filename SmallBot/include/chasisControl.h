@@ -11,6 +11,8 @@ void updateIntakePct(int pow);
 void waitUntilBalls(int ball);
 void betterPID();
 void splineDriveSet(std::vector<double> X, std::vector<double> Y, int angleO, bool right);
+void updateFly(int pwr);
+void updateRoller(int pwr);
 
 extern double vMag;
 extern double vectorD[2];

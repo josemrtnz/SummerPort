@@ -13,6 +13,8 @@ extern motor backRight;
 
 extern motor leftIntake;
 extern motor rightIntake;
+extern motor flyOuttake;
+extern motor rollerIntake;
 
 extern encoder leftTracker;
 extern encoder rightTracker;

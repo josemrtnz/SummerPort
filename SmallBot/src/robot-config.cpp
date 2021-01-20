@@ -10,26 +10,28 @@ competition Comp;
 controller Controller1 = controller(primary);
 
 // Global instances of the drive motors
-motor frontRight = motor(PORT8, ratio18_1, false);
-motor frontLeft = motor(PORT7, ratio18_1, false);
-motor backLeft = motor(PORT9, ratio18_1, false);
-motor backRight = motor(PORT10, ratio18_1, false);
+motor frontRight = motor(PORT16, ratio18_1, false);
+motor frontLeft = motor(PORT15, ratio18_1, false);
+motor backLeft = motor(PORT11, ratio18_1, false);
+motor backRight = motor(PORT12, ratio18_1, false);
 
 // Global instances of the intake motors
-motor leftIntake = motor(PORT6, ratio18_1, true);
-motor rightIntake = motor(PORT5, ratio18_1, false);
+motor leftIntake = motor(PORT3, ratio18_1, true); // change to 600 rpm
+motor rightIntake = motor(PORT20, ratio18_1, false); // chaneg to 600 rpm
+motor flyOuttake = motor(PORT7, ratio6_1, true);
+motor rollerIntake = motor(PORT8, ratio18_1, true);
 
 // Global instances of the tracking encoders
 encoder leftTracker = encoder(Brain.ThreeWirePort.A);
-encoder rightTracker = encoder(Brain.ThreeWirePort.G);
-encoder backTracker = encoder(Brain.ThreeWirePort.C);
+encoder rightTracker = encoder(Brain.ThreeWirePort.C);
+encoder backTracker = encoder(Brain.ThreeWirePort.E);
 
 // Global instances of the auton selecors.
-limit incSelect = limit(Brain.ThreeWirePort.E);
-limit decSelect = limit(Brain.ThreeWirePort.F);
+limit incSelect = limit(Brain.ThreeWirePort.H);
+limit decSelect = limit(Brain.ThreeWirePort.G);
 
 // Global instance of the ballDetector sensor
-line ballDetector = line(Brain.ThreeWirePort.F);
+//line ballDetector = line(Brain.ThreeWirePort.F);
 
 // Global instance of the gyro sensor
 inertial gyroM(PORT20);

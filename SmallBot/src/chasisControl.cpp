@@ -40,6 +40,18 @@ float turnTotalError = 0; // totalError + error
 int turnCap = 500;
 ///////////////////
 
+// Fly PID Settings
+float flykP = 15; //150
+float flykD = 2.5; //700
+float flykI = 5; //4
+
+float flyError = 0; // EnvoderValue - Desired Value (The further you are from your target the bigger this number will be)
+float flyPrevError = 0; // EncoderValue 20ms ago
+float flyDerivative = 0; // error - previousError : Speed
+float flyTotalError = 0; // totalError + error
+int flyCap = 12000;
+///////////////////
+
 ///////////
 // ~~~~~~~~~~~
 ////////////////////
@@ -52,6 +64,8 @@ float targetX = 0;
 float targetY = 0;
 float targetA = 0;
 int intakePct = 0;
+int flyWheelRPM = 0;
+int rollerPct = 0;
 bool isDriveSpline = false;
 tk::spline robotSpline;
 float vectorU[2];
@@ -77,10 +91,10 @@ float angleVoltage;
 //////////////////////////////////////
 // Controlls all motors in all directions
 void moveDrive(double x, double y, float turn){
-  frontLeft.spin( fwd, (x*cos(flbrWheels-angleR) + y*sin(flbrWheels-angleR)) - turn, voltageUnits::mV);
-  frontRight.spin(fwd, -(x*cos(frblWheels-angleR) + y*sin(frblWheels-angleR)) - turn, voltageUnits::mV);
-  backLeft.spin(fwd, (x*cos(frblWheels-angleR) + y*sin(frblWheels-angleR)) - turn, voltageUnits::mV);
-  backRight.spin(fwd, -(x*cos(flbrWheels-angleR) + y*sin(flbrWheels-angleR)) - turn, voltageUnits::mV);
+  frontLeft.spin( fwd, -(x*cos(flbrWheels-angleR) + y*sin(flbrWheels-angleR)) - turn, voltageUnits::mV);
+  frontRight.spin(fwd, (x*cos(frblWheels-angleR) + y*sin(frblWheels-angleR)) - turn, voltageUnits::mV);
+  backLeft.spin(fwd, -(x*cos(frblWheels-angleR) + y*sin(frblWheels-angleR)) - turn, voltageUnits::mV);
+  backRight.spin(fwd, (x*cos(flbrWheels-angleR) + y*sin(flbrWheels-angleR)) - turn, voltageUnits::mV);
 }
 //////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -172,6 +186,21 @@ double updateTurnPID(float angleTarget, float currentAngle){
   else if((turnTotalError*turnkI)<-turnCap) turnTotalError = -turnCap/turnkI;
 
   return (turnkP*turnError + turnkD*turnDerivative + turnkI*turnTotalError);
+}
+//////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////
+double flyPID(double flyRPMTarget, double currentFlyRPM){
+  flyError = currentFlyRPM - flyRPMTarget;
+  flyDerivative = flyError - flyPrevError;
+  flyTotalError += flyError;
+
+  if((flyTotalError*flykI)>flyCap) flyTotalError = flyCap/flykI;
+  else if((flyTotalError*flykI)<-flyCap) flyTotalError = -flyCap/flykI;
+
+  return -(flykP*flyError + flykD*flyDerivative + flykI*flyTotalError);
 }
 //////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -320,6 +349,23 @@ void intakeMovePct(){
 //////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////
+void flyMovePct(){
+  double flyVoltage = flyPID(flyWheelRPM, flyOuttake.velocity(rpm));
+  if (flyWheelRPM == 0) flyVoltage = 0;
+  flyOuttake.spin(fwd, flyVoltage, voltageUnits::mV);
+}
+//////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////
+void rollerMovePct(){
+  rollerIntake.spin(fwd, rollerPct, pct);
+}
+//////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
@@ -415,6 +461,21 @@ void updateAngle(int angleO){
 //////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////
+void updateFly(int rpmJ){
+  flyWheelRPM = rpmJ;
+}
+//////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////
+void updateRoller(int pwr){
+  rollerPct = pwr;
+}
+//////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
@@ -427,6 +488,8 @@ int autoMain(){ // This task will control our robot's movement and intake during
     if(isDriveSpline) splineDrive();
     movAb();
     intakeMovePct();
+    rollerMovePct();
+    flyMovePct();
     task::sleep(20);
   }
 
