@@ -40,16 +40,19 @@ float turnTotalError = 0; // totalError + error
 int turnCap = 500;
 ///////////////////
 
-// Fly PID Settings
-float flykP = 15; //150
-float flykD = 2.5; //700
-float flykI = 5; //4
-
-float flyError = 0; // EnvoderValue - Desired Value (The further you are from your target the bigger this number will be)
-float flyPrevError = 0; // EncoderValue 20ms ago
-float flyDerivative = 0; // error - previousError : Speed
-float flyTotalError = 0; // totalError + error
-int flyCap = 12000;
+// Fly TBH Settings
+float flykI = .4; //4
+double flyError = 0;
+double flyVoltage = 0;
+double flyLastError = 0;
+int flyApprox = 0;
+bool firstCross = true;
+double flyZero = 0;
+bool shooting = false;
+bool prevShot = 0;
+short ballsDeteced = 0;
+short ballsToShoot = 0;
+int lowerBound = 0;
 ///////////////////
 
 ///////////
@@ -192,21 +195,6 @@ double updateTurnPID(float angleTarget, float currentAngle){
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
-double flyPID(double flyRPMTarget, double currentFlyRPM){
-  flyError = currentFlyRPM - flyRPMTarget;
-  flyDerivative = flyError - flyPrevError;
-  flyTotalError += flyError;
-
-  if((flyTotalError*flykI)>flyCap) flyTotalError = flyCap/flykI;
-  else if((flyTotalError*flykI)<-flyCap) flyTotalError = -flyCap/flykI;
-
-  return -(flykP*flyError + flykD*flyDerivative + flykI*flyTotalError);
-}
-//////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////
 int turningCap(double distanceMag){
   if(distanceMag>30.0) return 2000;
   else if(distanceMag<10.0) return 6000;
@@ -342,6 +330,30 @@ void updateIntakePct(int pow){
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
+void updateflyTBH(){
+
+  flyError = flyWheelRPM - flyOuttake.velocity(rpm);
+  flyVoltage += flykI*flyError;
+
+  // Clip
+  if (flyVoltage > 12000) flyVoltage = 12000;
+  else if (flyVoltage < lowerBound) flyVoltage = lowerBound;
+
+  // Zero crossing
+  if (std::signbit(flyError) != std::signbit(flyLastError)){
+    if( firstCross ){
+      flyVoltage = flyApprox;
+      firstCross = false;
+    } else flyVoltage = 0.5 * (flyVoltage + flyZero);
+    flyZero = flyVoltage;
+  }
+  flyLastError = flyError;
+}
+//////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////
 void intakeMovePct(){
   leftIntake.spin(fwd, intakePct, pct);
   rightIntake.spin(fwd, intakePct, pct);
@@ -352,8 +364,7 @@ void intakeMovePct(){
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
 void flyMovePct(){
-  double flyVoltage = flyPID(flyWheelRPM, flyOuttake.velocity(rpm));
-  if (flyWheelRPM == 0) flyVoltage = 0;
+  updateflyTBH();
   flyOuttake.spin(fwd, flyVoltage, voltageUnits::mV);
 }
 //////////////////////////////////////
@@ -464,7 +475,29 @@ void updateAngle(int angleO){
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
 void updateFly(int rpmJ){
+  flyApprox = 10000;
+  flyError = 0;
+  flyLastError = 0;
+  flyVoltage = 0;
+  flyZero = 8000;
+  lowerBound = 5000;
+  firstCross = true;
   flyWheelRPM = rpmJ;
+}
+//////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////
+void stopFly(){
+  flyApprox = 0;
+  flyError = 0;
+  flyLastError = 0;
+  flyVoltage = 0;
+  flyZero = 0;
+  lowerBound = 0;
+  firstCross = true;
+  flyWheelRPM = 0;
 }
 //////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -479,6 +512,35 @@ void updateRoller(int pwr){
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
+void shootBall(int balls){
+  ballsDeteced = 0;
+  ballsToShoot = balls;
+  shooting = true;
+}
+//////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////
+void shootingBall(){
+  if (shooting == true){
+    rollerPct = 100;
+
+    if ((prevShot == true) && (shootD.pressing() == false)){
+      ballsDeteced++;
+      if (ballsDeteced == ballsToShoot){
+        rollerPct = 0;
+        shooting = false;
+      }
+    }
+    prevShot = shootD.pressing();
+  }
+}
+//////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////
 int autoMain(){ // This task will control our robot's movement and intake during the autonmous period.
 
   coastMotor();
@@ -487,6 +549,7 @@ int autoMain(){ // This task will control our robot's movement and intake during
 
     if(isDriveSpline) splineDrive();
     movAb();
+    shootingBall();
     intakeMovePct();
     rollerMovePct();
     flyMovePct();

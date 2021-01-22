@@ -95,10 +95,11 @@ int updateScreen(){
     printf("Distance: %.2lf Y Voltage: %.0f X Voltage: %.0f\n", vMag, yVoltage, xVoltage);
     printf("Tracking Wheels Angle: %0.f   IMU angle: %0.lf\n", angleD, gyroM.rotation());
     printf("rightTW: %.0lf, leftTW: %.0lf, backTW: %.0lf\n", rightTracker.position(deg), leftTracker.position(deg), backTracker.position(deg));
-    printf("Flywheel RPM: %.1lf, Flywheel Voltage: %.0lf\n\n\n", flyOuttake.velocity(rpm), flyOuttake.voltage());
+    printf("Flywheel RPM: %.1lf, Flywheel Voltage: %.0lf\n\n\n", flyOuttake.velocity(rpm), flyOuttake.voltage(voltageUnits::mV));
+    //printf("%.0lf, %.0lf, %.0lf \n", Brain.Timer.time(msec), flyOuttake.velocity(rpm), flyOuttake.voltage(voltageUnits::mV));
 
     //Delays task so it does not hog all resources
-    task::sleep(100 - (Brain.Timer.time(msec)-loopTime));
+    task::sleep(150 - (Brain.Timer.time(msec)-loopTime));
   }
 
   return 1;

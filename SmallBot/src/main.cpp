@@ -27,12 +27,11 @@ void opControl(){ // Driver Controll Function
   waitUntilSettled();
   updateTargetPos(0, 0, 0);
   waitUntilSettled();*/
+  //updateTargetPos(0, 20, 180);
   updateFly(550);
-  wait(2000, msec);
-  wait(4000, msec);
-  updateFly(0);
-  updateRoller(0);
-  wait(3000, msec);
+  wait(6000, msec);
+  stopFly();
+  wait(1000, msec);
   autoStart.stop(); // Ends the autonomous task
   
 
@@ -71,8 +70,8 @@ void autonM(){ // Final autonomous code will be here
 void disabledR(){ // This the code that will be run when the bot is in the disabled mode
   int max = 3; // Number of autonous routines we can select
   
-  if(incSelect) autonSelect++; // If you press the limit switch labeled for incSelect, the autonSelect variable will be increased by one.
-  else if(decSelect) autonSelect--; // If you press the limit switch labeled for decSelect, the autonSelect variable will be decreased by one.
+  //if(incSelect) autonSelect++; // If you press the limit switch labeled for incSelect, the autonSelect variable will be increased by one.
+  //else if(decSelect) autonSelect--; // If you press the limit switch labeled for decSelect, the autonSelect variable will be decreased by one.
   
   // This will make it so that if your autonSelect reaches -1, it will instead set it to last autonroutine, essenctially making it loop back.
   if(autonSelect == -1) autonSelect = max-1; 

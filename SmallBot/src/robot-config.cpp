@@ -27,8 +27,9 @@ encoder rightTracker = encoder(Brain.ThreeWirePort.C);
 encoder backTracker = encoder(Brain.ThreeWirePort.E);
 
 // Global instances of the auton selecors.
-limit incSelect = limit(Brain.ThreeWirePort.H);
-limit decSelect = limit(Brain.ThreeWirePort.G);
+/*limit incSelect = limit(Brain.ThreeWirePort.H);
+limit decSelect = limit(Brain.ThreeWirePort.G);*/
+limit shootD = limit(Brain.ThreeWirePort.H);
 
 // Global instance of the ballDetector sensor
 //line ballDetector = line(Brain.ThreeWirePort.F);

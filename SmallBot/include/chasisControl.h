@@ -13,6 +13,8 @@ void betterPID();
 void splineDriveSet(std::vector<double> X, std::vector<double> Y, int angleO, bool right);
 void updateFly(int pwr);
 void updateRoller(int pwr);
+void shootBall(int balls);
+void stopFly();
 
 extern double vMag;
 extern double vectorD[2];

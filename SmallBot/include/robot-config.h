@@ -22,6 +22,7 @@ extern encoder backTracker;
 
 extern limit incSelect;
 extern limit decSelect;
+extern limit shootD;
 
 extern line ballDetector;
 
