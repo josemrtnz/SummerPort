@@ -73,9 +73,13 @@ float yVoltage;
 float angleVoltage;
 ///////////////////
 
-///////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////
-// Controlls all motors in all directions
+/*! 
+ *  @brief Controlls all motors in all directions
+ *  @details This class is used to demonstrate a number of section commands.
+ *  @param x Horizontal Movement
+ *  @param Y Vertical Movement
+ *  @param turn Degrees to turn
+ */
 void moveDrive(double x, double y, float turn){
   frontLeft.spin( fwd, (x*cos(flbrWheels-angleR) + y*sin(flbrWheels-angleR)) + turn, voltageUnits::mV);
   frontRight.spin(fwd, -(x*cos(frblWheels-angleR) + y*sin(frblWheels-angleR)) + turn, voltageUnits::mV);

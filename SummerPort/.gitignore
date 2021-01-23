@@ -1,7 +1,0 @@
-/.vscode
-/bin
-/build
-compile_commands.json
-html/*
-latex/*
-docs/*
