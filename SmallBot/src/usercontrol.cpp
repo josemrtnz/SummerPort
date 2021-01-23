@@ -1,5 +1,8 @@
 #include "usercontrol.h"
 
+bool flyWheelOn = false;
+bool flyLastPress = false;
+
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////
 // This funciton will controll the bots drive motors based on controller input.
@@ -31,7 +34,7 @@ void driveMA(){
   // them with 120 to get mv and stores that into variables.
   int a3 = Controller1.Axis3.position(pct) * 120;
   int a4 = Controller1.Axis4.position(pct) * 120;
-  int a1 = Controller1.Axis1.position(pct) * 120;
+  int a1 = Controller1.Axis2.position(pct) * 120;
 
   // Angle is obtained from the gyro. 
   double currAngle = ((pi/180)*gyroM.heading());
@@ -95,3 +98,31 @@ int * enterCoor(){
 }
 //////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
+
+void flyWheelToggle(){
+  if ((flyLastPress == false) && Controller1.ButtonX.pressing()) flyWheelOn = !flyWheelOn;
+  flyLastPress = Controller1.ButtonX.pressing();
+
+  if(flyWheelOn) flyOuttake.spin(fwd, 100, pct);
+  else flyOuttake.spin(fwd, 0, pct);
+}
+
+void storageRoller(){
+  if (Controller1.ButtonL2.pressing()) rollerIntake.spin(directionType::fwd, 100, pct);
+  else if (Controller1.ButtonL1.pressing()) rollerIntake.spin(directionType::rev, 100, pct);
+  else rollerIntake.spin(directionType::fwd, 0, pct);
+}
+
+void brakeSetMotors(){
+  if(Controller1.ButtonB.pressing()){
+    frontLeft.setBrake(hold);
+    frontRight.setBrake(hold);
+    backLeft.setBrake(hold);
+    backRight.setBrake(hold);
+  } else if(Controller1.ButtonA.pressing()){
+    frontLeft.setBrake(coast);
+    frontRight.setBrake(coast);
+    backLeft.setBrake(coast);
+    backRight.setBrake(coast);
+  }
+}

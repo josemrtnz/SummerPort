@@ -15,6 +15,7 @@ void updateFly(int pwr);
 void updateRoller(int pwr);
 void shootBall(int balls);
 void stopFly();
+void waitTilFull();
 
 extern double vMag;
 extern double vectorD[2];

@@ -16,10 +16,10 @@ motor backLeft = motor(PORT11, ratio18_1, false);
 motor backRight = motor(PORT12, ratio18_1, false);
 
 // Global instances of the intake motors
-motor leftIntake = motor(PORT3, ratio18_1, true); // change to 600 rpm
-motor rightIntake = motor(PORT20, ratio18_1, false); // chaneg to 600 rpm
+motor leftIntake = motor(PORT8, ratio6_1, true); // change to 600 rpm
+motor rightIntake = motor(PORT20, ratio6_1, false); // chaneg to 600 rpm
 motor flyOuttake = motor(PORT7, ratio6_1, true);
-motor rollerIntake = motor(PORT8, ratio18_1, true);
+motor rollerIntake = motor(PORT9, ratio18_1, true);
 
 // Global instances of the tracking encoders
 encoder leftTracker = encoder(Brain.ThreeWirePort.A);
@@ -40,8 +40,8 @@ inertial gyroM(PORT20);
 float wheelDiameter = 3.3; //Tracking Wheel Diameter 2.785
 double pi = 3.14159265359; // (355/113) pi aproximation
 double wheelCir = wheelDiameter*pi; // Tracking Wheel Diameter
-float sL = 2.3; // Distance to tracking center
-float sR = 2.3; // Distance to tracking center
+float sL = 2.1; // Distance to tracking center
+float sR = 2.1; // Distance to tracking center
 float sS = 7.3; // Distance to tracking center
 
 float frblWheels = 2.35619449; // 135 deg in rads

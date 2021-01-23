@@ -28,10 +28,16 @@ void opControl(){ // Driver Controll Function
   updateTargetPos(0, 0, 0);
   waitUntilSettled();*/
   //updateTargetPos(0, 20, 180);
-  updateFly(550);
-  wait(6000, msec);
-  stopFly();
-  wait(1000, msec);
+  
+  //updateFly(550);
+  /*
+  updateTargetPos(0, 30, 0);
+  updateIntakePct(-100);
+  updateRoller(100);
+  waitTilFull();
+  updateRoller(0);
+  updateIntakePct(0);
+  wait(100, msec);*/
   autoStart.stop(); // Ends the autonomous task
   
 
@@ -43,6 +49,9 @@ void opControl(){ // Driver Controll Function
     else driveM(); // Otherwise driveM will run
 
     intakeM(); // Conrtolls the intake
+    flyWheelToggle();
+    storageRoller();
+    brakeSetMotors();
 
     if(Controller1.ButtonL1.pressing()) driveMASelect = true; // Pressing L1 on the controller will make driveMASelect true.
     else if(Controller1.ButtonL2.pressing()) driveMASelect = false; // Pressing L2 on the controller will make driveMASelect false.
