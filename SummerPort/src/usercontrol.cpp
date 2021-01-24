@@ -69,5 +69,14 @@ void userControl::setDriveMode(){
 }
 
 void userControl::driveLoop(){
-  
+  while(true){
+    intakeM();
+    storageRoller();
+    flyWheelToggle();
+    setBrakeMode();
+    setDriveMode();
+
+    if(driverMode) driveM();
+    else driveMA();
+  }
 }

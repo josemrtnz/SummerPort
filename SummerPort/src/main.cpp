@@ -26,7 +26,8 @@ task startTracking(trackerWrapper);
 task startPrinting(printerWrapper);
 
 void opControl(){
-  
+  userControl driveJose = userControl(&simp, true);
+  driveJose.driveLoop();
 }
 
 void autonM(){
