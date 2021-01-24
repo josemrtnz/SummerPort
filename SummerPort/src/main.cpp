@@ -22,9 +22,11 @@ int printerWrapper(){
   return 0;
 }
 
+task startTracking(trackerWrapper);
+task startPrinting(printerWrapper);
+
 void opControl(){
-  task startTracking(trackerWrapper);
-  task startPrinting(printerWrapper);
+  
 }
 
 void autonM(){
