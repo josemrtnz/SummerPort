@@ -78,5 +78,7 @@ void userControl::driveLoop(){
 
     if(driverMode) driveM();
     else driveMA();
+
+    wait(20, msec);
   }
 }
