@@ -1,50 +1,56 @@
+#pragma once
+#include "v5.h"
+#include "v5_vcs.h"
 using namespace vex;
 
-extern brain Brain;
-extern competition Comp;
+class robotChasis{
+  public:
+    brain Brain;
+    competition Comp;
+    controller Controller1;
 
-// VEXcode devices
-extern controller Controller1;
+    motor frontRight = motor(PORT16, ratio18_1, false);
+    motor frontLeft = motor(PORT15, ratio18_1, false);
+    motor backLeft = motor(PORT11, ratio18_1, false);
+    motor backRight = motor(PORT12, ratio18_1, false);
 
-extern motor frontRight;
-extern motor frontLeft;
-extern motor backLeft;
-extern motor backRight;
+    motor leftIntake = motor(PORT8, ratio6_1, true);
+    motor rightIntake = motor(PORT20, ratio6_1, true);
+    motor flyOuttake = motor(PORT7, ratio6_1, true);
+    motor rollerIntake = motor(PORT9, ratio6_1, true);
 
-extern motor leftIntake;
-extern motor rightIntake;
+    encoder leftTracker = encoder(Brain.ThreeWirePort.A);
+    encoder rightTracker = encoder(Brain.ThreeWirePort.C);
+    encoder backTracker = encoder(Brain.ThreeWirePort.E);
+    limit shootD = limit(Brain.ThreeWirePort.H);
 
-extern encoder leftTracker;
-extern encoder rightTracker;
-extern encoder backTracker;
+    inertial gyroM = inertial(PORT20);
 
-//extern limit incSelect;
-//extern limit decSelect;
+    void set_drive_break_type(brakeType B);
+    robotChasis(float wD, float tcL, float tcR, float tcB);
 
-extern line ballDetector;
+    double getPI();
+    float getsL();
+    float getsR();
+    float getsS();
+    float get_frbl();
+    float get_flbr();
+    double getWheelCir();
 
-extern inertial gyroM;
+  private:
 
-extern float wheelRadius; //JK it's diameter
-extern double wheelCir;
-extern double pi;
+    float wheelDiameter;
+    double wheelCir;
+    const double PI = 3.14159265359;
 
-extern float sL;
-extern float sR;
-extern float sS;
+    float sL;
+    float sR;
+    float sS;
 
-extern float frblWheels;
-extern float flbrWheels;
+    float frblWheels = 2.35619449;
+    float flbrWheels = 0.7853981634;
 
-extern float xPos;
-extern float yPos;
-extern float angleD;
-extern float angleR;
+    int autonSelect;
+};
 
-extern int autonSelect;
-/**
- * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
- * 
- * This should be called at the start of your int main function.
- */
-void  vexcodeInit( void );
+void  vexcodeInit( robotChasis *simp );

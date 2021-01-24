@@ -1,68 +1,42 @@
-#include "vex.h"
+#include <stdio.h>
+#include "robot-config.h"
 
 using namespace vex;
 
-// A global instance of brain used for printing to the V5 Brain screen
-brain  Brain;
-competition Comp;
+robotChasis::robotChasis( float wD, float tcL, float tcR, float tcB){
+  wheelDiameter = wD;
+  sL = tcL;
+  sR = tcR;
+  sS = tcB;
+}
 
-// VEXcode device constructors
-controller Controller1 = controller(primary);
+void robotChasis::set_drive_break_type(brakeType B){
+  frontLeft.setBrake(B);
+  frontRight.setBrake(B);
+  backLeft.setBrake(B);
+  backRight.setBrake(B);
+}
 
-motor frontRight = motor(PORT2, ratio18_1, false);
-motor frontLeft = motor(PORT3, ratio18_1, false);
-motor backLeft = motor(PORT4, ratio18_1, false);
-motor backRight = motor(PORT1, ratio18_1, false);
+double robotChasis::getPI() { return PI; }
+float robotChasis::get_flbr() { return flbrWheels; }
+float robotChasis::get_frbl(){ return frblWheels; }
+float robotChasis::getsL() { return sL; }
+float robotChasis::getsR() { return sR; }
+float robotChasis::getsS() { return sS; }
+double robotChasis::getWheelCir(){ return PI * wheelDiameter; }
 
-motor leftIntake = motor(PORT6, ratio18_1, true);
-motor rightIntake = motor(PORT5, ratio18_1, false);
-
-encoder leftTracker = encoder(Brain.ThreeWirePort.A);
-encoder rightTracker = encoder(Brain.ThreeWirePort.G);
-encoder backTracker = encoder(Brain.ThreeWirePort.C);
-
-//limit incSelect = limit(Brain.ThreeWirePort.E);
-//limit decSelect = limit(Brain.ThreeWirePort.F);
-
-line ballDetector = line(Brain.ThreeWirePort.F);
-
-inertial gyroM(PORT20);
-
-float wheelRadius = 2.85; //JK its diameter 2.785
-double pi = 3.14159265359; // (355/113) pi aproximation
-double wheelCir = wheelRadius*pi;
-float sL = 7.375;
-float sR = 7.375;
-float sS = 8;
-
-float frblWheels = 2.35619449;
-float flbrWheels = 0.7853981634;
-
-float xPos = 0;
-float yPos = 0;
-float angleD = 0;
-float angleR = 0;
-
-int autonSelect = 0;
-/**
- * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
- * 
- * This should be called at the start of your int main function.
- */
-void vexcodeInit( void ) {
-  // nothing to initialize
-  leftTracker.resetRotation();
-  rightTracker.resetRotation();
-  backTracker.resetRotation();
+void vexcodeInit(robotChasis *simp) {
+  simp->leftTracker.resetRotation();
+  simp->rightTracker.resetRotation();
+  simp->backTracker.resetRotation();
 
   wait(500, msec);
-  gyroM.calibrate();
-  while(gyroM.isCalibrating()){
+  // Gyro Callibrates
+  simp->gyroM.calibrate();
+  while(simp->gyroM.isCalibrating()){
     wait(50, msec);
   }
 
-  printf("%.0lf, %.0lf, %.0lf \n", leftTracker.position(deg), rightTracker.position(deg), backTracker.position(deg));
-  task trackingP(trackingPylons);
-
-  
+  // Prints the values of the tracking wheels in degrees.
+  printf("%.0lf, %.0lf, %.0lf \n", simp->leftTracker.position(deg), simp->rightTracker.position(deg), simp->backTracker.position(deg));
 }
