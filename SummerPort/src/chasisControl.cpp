@@ -11,7 +11,9 @@ void autonomousControl::setPIDConstants(float xkP, float xkI, float xkD, int xCa
   
   xPID.kP = xkP; xPID.kI = xkI; xPID.kD = xkD; xPID.cap = xCap;
   yPID.kP = ykP; yPID.kI = ykI; yPID.kD = ykD; yPID.cap = yCap;
-  turnPID.kP = turnkP; turnPID.kI = turnkI; turnPID.kD = turnkD; turnPID.cap = turnCap;                                 
+  turnPID.kP = turnkP; turnPID.kI = turnkI; turnPID.kD = turnkD; turnPID.cap = turnCap;   
+
+  yPID.curr = 0; yPID.error = 0; yPID.prevError = 0; yPID.derivative = 0; yPID.totalError = 0;                              
 }
 
 void autonomousControl::moveDrive(float x, float y, float turn){
@@ -25,16 +27,18 @@ float autonomousControl::averageRPM(){
   return (fabs(simp->frontRight.velocity(rpm)) + fabs(simp->frontLeft.velocity(rpm)) + fabs(simp->backRight.velocity(rpm)) + fabs(simp->backLeft.velocity(rpm)))/4;
 }
 
-float autonomousControl::updatePID(PIDSettings good){
-  good.error = good.curr - good.target;
-  good.derivative = good.error - good.prevError;
-  good.totalError += good.error;
+float autonomousControl::updatePID(PIDSettings *good){
+  good->error = good->curr - good->target;
+  good->derivative = good->error - good->prevError;
+  good->totalError = good->totalError + good->error;
 
-  if((good.totalError*good.kI)>good.cap) good.totalError = good.cap/good.kI;
-  else if((good.totalError*good.kI)<-good.cap)good.totalError = -good.cap/good.kI;
+  if((good->totalError*good->kI)>good->cap) good->totalError = good->cap/good->kI;
+  else if((good->totalError*good->kI)<-good->cap)good->totalError = -good->cap/good->kI;
 
-  good.prevError = good.error;
-  return -(good.kP*good.error + good.kD*good.derivative + good.kI*good.totalError);
+  if(std::signbit(good->error) != std::signbit(good->prevError)) good->totalError = 0;
+
+  good->prevError = good->error;
+  return -(good->kP*good->error + good->kD*good->derivative + good->kI*good->totalError);
 }
 
 int autonomousControl::turnCap(float distanceMag){
@@ -51,12 +55,15 @@ void autonomousControl::movAB(){
   vectorD[0] = xPID.target - xPID.curr;
   vectorD[1] = yPID.target - yPID.curr;
   vMag = sqrt((vectorD[0]*vectorD[0]) + (vectorD[1]*vectorD[1]));
+  driveRatio(vectorD[0]/vMag, vectorD[1]/vMag);
+
+  
 
   int turnCapVoltage = turnCap(vMag);
 
-  xVoltage = updatePID(xPID);
-  yVoltage = updatePID(yPID);
-  angleVoltage = updatePID(turnPID);
+  xVoltage = updatePID(&xPID);
+  yVoltage = updatePID(&yPID);
+  angleVoltage = updatePID(&turnPID);
 
   if(angleVoltage>turnCapVoltage) angleVoltage = turnCapVoltage;
   else if(angleVoltage<-turnCapVoltage) angleVoltage = -turnCapVoltage;
@@ -194,3 +201,11 @@ void autonomousControl::autoMain(){
     task::sleep(20);
   }
 }
+
+void autonomousControl::driveRatio(float x, float y){
+  frontRightRatio = x*cos(simp->get_frbl()-tracking->getangleR()) + y*sin(simp->get_frbl()-tracking->getangleR());
+  frontLeftRatio = -(x*cos(simp->get_flbr()-tracking->getangleR()) + y*sin(simp->get_flbr()-tracking->getangleR()));
+  backRightRatio = x*cos(simp->get_frbl()-tracking->getangleR()) + y*sin(simp->get_frbl()-tracking->getangleR());
+  backLeftRatio = -(x*cos(simp->get_flbr()-tracking->getangleR()) + y*sin(simp->get_flbr()-tracking->getangleR()));
+}
+

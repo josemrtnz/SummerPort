@@ -26,11 +26,11 @@ void userControl::setBrakeMode(){
 
 void userControl::intakeM(){
   if(simp->Controller1.ButtonR1.pressing()){
-    simp->leftIntake.spin(fwd, 100, percentUnits::pct);
+    simp->leftIntake.spin(fwd, -100, percentUnits::pct);
     simp->rightIntake.spin(fwd, 100, percentUnits::pct);
    
   } else if(simp->Controller1.ButtonR2.pressing()){ 
-    simp->leftIntake.spin(fwd, -100, percentUnits::pct);
+    simp->leftIntake.spin(fwd, 100, percentUnits::pct);
     simp->rightIntake.spin(fwd, -100, percentUnits::pct);
     
   } else { 

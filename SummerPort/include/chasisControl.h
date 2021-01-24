@@ -12,7 +12,7 @@ class autonomousControl{
     void updateRoller(int pwr);
     void setPIDConstants(float xkP, float xkI, float xkD, int xCap,
                          float ykP, float ykI, float ykD, int yCap,
-                         float turnkP, float kI, float turnkD, int turnCap);
+                         float turnkP, float turnkI, float turnkD, int turnCap);
     void stopFly();
 
     void waitTilFull();
@@ -22,13 +22,12 @@ class autonomousControl{
 
     void shootBall(int balls);
     void autoMain();
-
     autonomousControl(robotChasis *robot, odometry *tr);
 
   private:
     struct PIDSettings {
-      float target = 0, curr = 0, error = 0, prevError = 0,
-            derivative = 0, totalError = 0;
+      float target; float curr; float error; float prevError;
+            float derivative; float totalError;
       float kP, kI, kD;
       int cap;
     };
@@ -36,6 +35,7 @@ class autonomousControl{
     PIDSettings xPID;
     PIDSettings yPID;
     PIDSettings turnPID;
+    PIDSettings rpmPID;
     
     robotChasis *simp;
     odometry *tracking;
@@ -60,10 +60,15 @@ class autonomousControl{
     double xVoltage;
     double yVoltage;
     double angleVoltage;
+    float frontRightRatio;
+    float frontLeftRatio;
+    float backRightRatio;
+    float backLeftRatio;
+    
 
     void moveDrive(float x, float y, float turn);
     float averageRPM();
-    float updatePID(PIDSettings good);
+    float updatePID(PIDSettings *good);
     int turnCap(float distanceMag);
     void movAB();
     void updateFlyTBH();
@@ -71,4 +76,5 @@ class autonomousControl{
     void flyMove();
     void rollerMove();
     void shootingBall();
+    void driveRatio(float x, float y);
 };
