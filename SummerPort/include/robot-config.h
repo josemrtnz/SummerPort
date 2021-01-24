@@ -5,6 +5,14 @@ using namespace vex;
 
 class robotChasis{
   public:
+    double getPI();
+    float getsL();
+    float getsR();
+    float getsS();
+    float get_frbl();
+    float get_flbr();
+    double getWheelCir();
+
     brain Brain;
     competition Comp;
     controller Controller1;
@@ -27,15 +35,8 @@ class robotChasis{
     inertial gyroM = inertial(PORT20);
 
     void set_drive_break_type(brakeType B);
+    void stopMotors();
     robotChasis(float wD, float tcL, float tcR, float tcB);
-
-    double getPI();
-    float getsL();
-    float getsR();
-    float getsS();
-    float get_frbl();
-    float get_flbr();
-    double getWheelCir();
 
   private:
 

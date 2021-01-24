@@ -17,6 +17,13 @@ void robotChasis::set_drive_break_type(brakeType B){
   backRight.setBrake(B);
 }
 
+void robotChasis::stopMotors(){
+  frontLeft.stop();
+  frontRight.stop();
+  backLeft.stop();
+  backRight.stop();
+}
+
 double robotChasis::getPI() { return PI; }
 float robotChasis::get_flbr() { return flbrWheels; }
 float robotChasis::get_frbl(){ return frblWheels; }
