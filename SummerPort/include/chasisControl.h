@@ -10,8 +10,11 @@ class autonomousControl{
     void updateIntakePct(int pow);
     void updateFly(int rpm);
     void updateRoller(int pwr);
-    void setPIDConstants(float xkP, float xkI, float xkD, int xCap,
-                         float ykP, float ykI, float ykD, int yCap,
+    void setPIDConstants(float flkP, float flkI, float flkD, int flCap,
+                         float frkP, float frkI, float frkD, int frCap,
+                         float blkP, float blkI, float blkD, int blCap,
+                         float brkP, float brkI, float brkD, int brCap,
+                         float rpmkP, float rpmkI, float rpmkD, int rpmCap,
                          float turnkP, float turnkI, float turnkD, int turnCap);
     void stopFly();
 
@@ -32,8 +35,10 @@ class autonomousControl{
       int cap;
     };
 
-    PIDSettings xPID;
-    PIDSettings yPID;
+    PIDSettings flPID;
+    PIDSettings frPID;
+    PIDSettings blPID;
+    PIDSettings brPID;
     PIDSettings turnPID;
     PIDSettings rpmPID;
     
@@ -57,16 +62,15 @@ class autonomousControl{
     int lowerBound = 0;
     double vectorD[2];
     float vMag;
-    double xVoltage;
-    double yVoltage;
     double angleVoltage;
     float driveRatioV[4]; // fr fl br bl
     float driveRPM[4]; // fr fl br bl
     float currPos[4]; // x y angleR angleD
     float targetPos[3]; // x y angleD
+    float driveVoltages[4]; // fr fl br bl
     
 
-    void moveDrive(float x, float y, float turn);
+    void moveDrive(float fr, float fl, float br, float bl);
     float averageRPM();
     float updatePID(PIDSettings *good);
     int turnCap(float distanceMag);
@@ -81,4 +85,5 @@ class autonomousControl{
     void updateCurrPos();
     float findMaxRPM();
     void normalizeRPM(float max);
+    void set_RPM_values();
 };

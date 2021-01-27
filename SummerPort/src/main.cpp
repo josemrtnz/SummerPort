@@ -33,15 +33,18 @@ task startPrinting(printerWrapper);
 task startAuto(autoWrapper);
 
 void opControl(){
-  /*
-  autoChasis.setPIDConstants(700, 1, 350, 1500, 
-                             700, 1, 350, 1500, 
-                             175, 40, 85, 500);
+  
+  autoChasis.setPIDConstants(0, 0, 0, 0, 
+                             0, 0, 0, 0,
+                             0, 0, 0, 0, 
+                             0, 0, 0, 0,
+                             0, 0, 0, 0, 
+                             0, 0, 0, 0);
   autoChasis.updateTargetPos(15, 15, 90);
   autoChasis.waitUntilSettled();
   autoChasis.updateTargetPos(0, 0, 0);
   wait(100000, msec);
-  */
+  
   startAuto.stop();
 
 

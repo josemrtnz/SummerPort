@@ -5,22 +5,25 @@ autonomousControl::autonomousControl(robotChasis *robot, odometry *tr){
   tracking = tr;
 }
 
-void autonomousControl::setPIDConstants(float xkP, float xkI, float xkD, int xCap,
-                                        float ykP, float ykI, float ykD, int yCap,
+void autonomousControl::setPIDConstants(float flkP, float flkI, float flkD, int flCap,
+                                        float frkP, float frkI, float frkD, int frCap,
+                                        float blkP, float blkI, float blkD, int blCap,
+                                        float brkP, float brkI, float brkD, int brCap,
+                                        float rpmkP, float rpmkI, float rpmkD, int rpmCap,
                                         float turnkP, float turnkI, float turnkD, int turnCap){
-  
-  xPID.kP = xkP; xPID.kI = xkI; xPID.kD = xkD; xPID.cap = xCap;
-  yPID.kP = ykP; yPID.kI = ykI; yPID.kD = ykD; yPID.cap = yCap;
-  turnPID.kP = turnkP; turnPID.kI = turnkI; turnPID.kD = turnkD; turnPID.cap = turnCap;   
-
-  yPID.curr = 0; yPID.error = 0; yPID.prevError = 0; yPID.derivative = 0; yPID.totalError = 0;                              
+  flPID.kP = flkP; flPID.kI = flkI; flPID.kD = flkD; flPID.cap = flCap;
+  frPID.kP = frkP; frPID.kI = frkI; frPID.kD = frkD; frPID.cap = frCap;
+  blPID.kP = blkP; blPID.kI = blkI; blPID.kD = blkD; blPID.cap = blCap;
+  brPID.kP = brkP; brPID.kI = brkI; brPID.kD = brkD; brPID.cap = brCap;
+  rpmPID.kP = rpmkP; rpmPID.kI = rpmkI; rpmPID.kD = rpmkD; rpmPID.cap = rpmCap;
+  turnPID.kP = turnkP; turnPID.kI = turnkI; turnPID.kD = turnkD; turnPID.cap = turnCap;                         
 }
 
-void autonomousControl::moveDrive(float x, float y, float turn){
-  simp->frontLeft.spin( fwd, -(x*cos(simp->get_flbr()-currPos[2]) + y*sin(simp->get_flbr()-currPos[2])) - turn, voltageUnits::mV);
-  simp->frontRight.spin(fwd, (x*cos(simp->get_frbl()-currPos[2]) + y*sin(simp->get_frbl()-currPos[2])) - turn, voltageUnits::mV);
-  simp->backLeft.spin(fwd, -(x*cos(simp->get_frbl()-currPos[2]) + y*sin(simp->get_frbl()-currPos[2])) - turn, voltageUnits::mV);
-  simp->backRight.spin(fwd, (x*cos(simp->get_flbr()-currPos[2]) + y*sin(simp->get_flbr()-currPos[2])) - turn, voltageUnits::mV);
+void autonomousControl::moveDrive(float fr, float fl, float br, float bl){
+  simp->frontLeft.spin( fwd, fl, voltageUnits::mV);
+  simp->frontRight.spin(fwd, fr, voltageUnits::mV);
+  simp->backLeft.spin(fwd, bl, voltageUnits::mV);
+  simp->backRight.spin(fwd, br, voltageUnits::mV);
 }
 
 float autonomousControl::averageRPM(){
@@ -52,13 +55,19 @@ void autonomousControl::movAB(){
   vectorD[1] = targetPos[1] - currPos[1];
 
   vMag = sqrt((vectorD[0]*vectorD[0]) + (vectorD[1]*vectorD[1])); 
+  updateCurrPos();
+  updateDriveRPM(vectorD[0]/vMag, vectorD[1]/vMag);
+  driveVoltages[0] = updatePID(&frPID);
+  driveVoltages[1] = updatePID(&flPID);
+  driveVoltages[2] = updatePID(&brPID);
+  driveVoltages[3] = updatePID(&blPID);
 
-  moveDrive(0, 0, 0);  
+  moveDrive(driveVoltages[0], driveVoltages[1], driveVoltages[2], driveVoltages[3]);  
 }
 
 void autonomousControl::updateTargetPos(float x, float y, int angleO){
-  xPID.target = x;
-  yPID.target = y;
+  targetPos[0] = x;
+  targetPos[1] = y;
   turnPID.target = angleO;
 }
 
@@ -204,7 +213,19 @@ void autonomousControl::updateDriveRPM( float x, float y ){
   float max = findMaxRPM();
 
   if (max > 200) normalizeRPM(max);
+  set_RPM_values();
+}
 
+void autonomousControl::set_RPM_values(){
+  frPID.target = driveRPM[0];
+  flPID.target = driveRPM[1];
+  brPID.target = driveRPM[2];
+  blPID.target = driveRPM[3]; 
+
+  frPID.target = simp->frontRight.velocity(rpm);
+  flPID.target =simp->frontLeft.velocity(rpm);
+  brPID.target = simp->backRight.velocity(rpm);
+  blPID.target = simp->backLeft.velocity(rpm); 
 }
 
 void autonomousControl::updateCurrPos(){
