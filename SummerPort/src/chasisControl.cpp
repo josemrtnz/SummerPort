@@ -17,10 +17,10 @@ void autonomousControl::setPIDConstants(float xkP, float xkI, float xkD, int xCa
 }
 
 void autonomousControl::moveDrive(float x, float y, float turn){
-  simp->frontLeft.spin( fwd, -(x*cos(simp->get_flbr()-tracking->getangleR()) + y*sin(simp->get_flbr()-tracking->getangleR())) - turn, voltageUnits::mV);
-  simp->frontRight.spin(fwd, (x*cos(simp->get_frbl()-tracking->getangleR()) + y*sin(simp->get_frbl()-tracking->getangleR())) - turn, voltageUnits::mV);
-  simp->backLeft.spin(fwd, -(x*cos(simp->get_frbl()-tracking->getangleR()) + y*sin(simp->get_frbl()-tracking->getangleR())) - turn, voltageUnits::mV);
-  simp->backRight.spin(fwd, (x*cos(simp->get_flbr()-tracking->getangleR()) + y*sin(simp->get_flbr()-tracking->getangleR())) - turn, voltageUnits::mV);
+  simp->frontLeft.spin( fwd, -(x*cos(simp->get_flbr()-currPos[2]) + y*sin(simp->get_flbr()-currPos[2])) - turn, voltageUnits::mV);
+  simp->frontRight.spin(fwd, (x*cos(simp->get_frbl()-currPos[2]) + y*sin(simp->get_frbl()-currPos[2])) - turn, voltageUnits::mV);
+  simp->backLeft.spin(fwd, -(x*cos(simp->get_frbl()-currPos[2]) + y*sin(simp->get_frbl()-currPos[2])) - turn, voltageUnits::mV);
+  simp->backRight.spin(fwd, (x*cos(simp->get_flbr()-currPos[2]) + y*sin(simp->get_flbr()-currPos[2])) - turn, voltageUnits::mV);
 }
 
 float autonomousControl::averageRPM(){
@@ -48,35 +48,12 @@ int autonomousControl::turnCap(float distanceMag){
 }
 
 void autonomousControl::movAB(){
-  xPID.curr = tracking->getXPos();
-  yPID.curr = tracking->getYPos();
-  turnPID.curr = tracking->getangleD();
+  vectorD[0] = targetPos[0] - currPos[0];
+  vectorD[1] = targetPos[1] - currPos[1];
 
-  vectorD[0] = xPID.target - xPID.curr;
-  vectorD[1] = yPID.target - yPID.curr;
-  vMag = sqrt((vectorD[0]*vectorD[0]) + (vectorD[1]*vectorD[1]));
-  driveRatio(vectorD[0]/vMag, vectorD[1]/vMag);
+  vMag = sqrt((vectorD[0]*vectorD[0]) + (vectorD[1]*vectorD[1])); 
 
-  
-
-  int turnCapVoltage = turnCap(vMag);
-
-  xVoltage = updatePID(&xPID);
-  yVoltage = updatePID(&yPID);
-  angleVoltage = updatePID(&turnPID);
-
-  if(angleVoltage>turnCapVoltage) angleVoltage = turnCapVoltage;
-  else if(angleVoltage<-turnCapVoltage) angleVoltage = -turnCapVoltage;
-
-  if(xVoltage>10000) xVoltage = 10000;
-  else if(xVoltage<-10000) xVoltage = -10000;
-
-  if(yVoltage>10000) yVoltage = 10000;
-  else if(yVoltage<-10000) yVoltage = -10000;
-
-  //////////////////////////////////////////////////
-
-  moveDrive(xVoltage, yVoltage, angleVoltage);  
+  moveDrive(0, 0, 0);  
 }
 
 void autonomousControl::updateTargetPos(float x, float y, int angleO){
@@ -203,9 +180,52 @@ void autonomousControl::autoMain(){
 }
 
 void autonomousControl::driveRatio(float x, float y){
-  frontRightRatio = x*cos(simp->get_frbl()-tracking->getangleR()) + y*sin(simp->get_frbl()-tracking->getangleR());
-  frontLeftRatio = -(x*cos(simp->get_flbr()-tracking->getangleR()) + y*sin(simp->get_flbr()-tracking->getangleR()));
-  backRightRatio = x*cos(simp->get_frbl()-tracking->getangleR()) + y*sin(simp->get_frbl()-tracking->getangleR());
-  backLeftRatio = -(x*cos(simp->get_flbr()-tracking->getangleR()) + y*sin(simp->get_flbr()-tracking->getangleR()));
+  driveRatioV[0] = x*cos(simp->get_frbl()-currPos[2]) + y*sin(simp->get_frbl()-currPos[2]);
+  driveRatioV[1] = -(x*cos(simp->get_flbr()-currPos[2]) + y*sin(simp->get_flbr()-currPos[2]));
+  driveRatioV[2] = x*cos(simp->get_frbl()-currPos[2]) + y*sin(simp->get_frbl()-currPos[2]);
+  driveRatioV[3] = -(x*cos(simp->get_flbr()-currPos[2]) + y*sin(simp->get_flbr()-currPos[2]));
 }
 
+void autonomousControl::updateDriveRPM( float x, float y ){
+  driveRatio(x, y);
+  rpmPID.target = vMag;
+  turnPID.curr = currPos[3];
+  float genRPM = updatePID(&rpmPID);
+  float turnRPM = updatePID(&turnPID);
+
+  if (fabs(turnRPM) > 120) turnRPM = (turnRPM/fabs(turnRPM))*120;
+  if(genRPM > 282) genRPM = 282;
+
+  driveRPM[0] = (driveRatioV[0] * genRPM) - turnRPM;
+  driveRPM[1] = (driveRatioV[1] * genRPM) - turnRPM;
+  driveRPM[2] = (driveRatioV[2] * genRPM) - turnRPM;
+  driveRPM[3] = (driveRatioV[3] * genRPM) - turnRPM;
+  
+  float max = findMaxRPM();
+
+  if (max > 200) normalizeRPM(max);
+
+}
+
+void autonomousControl::updateCurrPos(){
+  currPos[0] = tracking->getXPos();
+  currPos[1] = tracking->getYPos();
+  currPos[2] = tracking->getangleR();
+  currPos[3] = tracking->getangleD();
+}
+
+float autonomousControl::findMaxRPM(){
+  float max = 0;
+  for (int i = 0; i < 4; i++){ 
+        if (driveRPM[i] > max) max = driveRPM[i];
+        } 
+  return max;
+}
+
+void autonomousControl::normalizeRPM(float max){
+  float divisor = max/200;
+  driveRPM[0] = driveRPM[0]/divisor;
+  driveRPM[1] = driveRPM[1]/divisor;
+  driveRPM[2] = driveRPM[2]/divisor;
+  driveRPM[3] = driveRPM[3]/divisor;
+}

@@ -60,10 +60,10 @@ class autonomousControl{
     double xVoltage;
     double yVoltage;
     double angleVoltage;
-    float frontRightRatio;
-    float frontLeftRatio;
-    float backRightRatio;
-    float backLeftRatio;
+    float driveRatioV[4]; // fr fl br bl
+    float driveRPM[4]; // fr fl br bl
+    float currPos[4]; // x y angleR angleD
+    float targetPos[3]; // x y angleD
     
 
     void moveDrive(float x, float y, float turn);
@@ -77,4 +77,8 @@ class autonomousControl{
     void rollerMove();
     void shootingBall();
     void driveRatio(float x, float y);
+    void updateDriveRPM(float x, float y);
+    void updateCurrPos();
+    float findMaxRPM();
+    void normalizeRPM(float max);
 };
