@@ -34,12 +34,12 @@ task startAuto(autoWrapper);
 
 void opControl(){
   
-  autoChasis.setPIDConstants(0, 0, 0, 0, 
-                             0, 0, 0, 0,
-                             0, 0, 0, 0, 
-                             0, 0, 0, 0,
-                             0, 0, 0, 0, 
-                             0, 0, 0, 0);
+  autoChasis.setPIDConstants(10000, 0, 0, 0, 
+                             10000, 0, 0, 0,
+                             10000, 0, 0, 0, 
+                             10000, 0, 0, 0,
+                             25, 0, 0, 0, 
+                             50, 0, 0, 0);
   autoChasis.updateTargetPos(15, 15, 90);
   autoChasis.waitUntilSettled();
   autoChasis.updateTargetPos(0, 0, 0);
