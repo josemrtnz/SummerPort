@@ -14,6 +14,7 @@ void userControl::flyWheelToggle(){
 }
 
 void userControl::storageRoller(){
+  
   if (simp->Controller1.ButtonL2.pressing()) simp->rollerIntake.spin(directionType::fwd, 100, pct);
   else if (simp->Controller1.ButtonL1.pressing()) simp->rollerIntake.spin(directionType::rev, 100, pct);
   else simp->rollerIntake.spin(directionType::fwd, 0, pct);
@@ -28,14 +29,18 @@ void userControl::intakeM(){
   if(simp->Controller1.ButtonR1.pressing()){
     simp->leftIntake.spin(fwd, -100, percentUnits::pct);
     simp->rightIntake.spin(fwd, 100, percentUnits::pct);
+    if(!simp->shootD.pressing()) simp->rollerIntake.spin(directionType::fwd, 100, pct);
+    else simp->rollerIntake.stop(brakeType::hold);
    
   } else if(simp->Controller1.ButtonR2.pressing()){ 
     simp->leftIntake.spin(fwd, 100, percentUnits::pct);
     simp->rightIntake.spin(fwd, -100, percentUnits::pct);
+    simp->rollerIntake.spin(directionType::fwd, -100, pct);
     
   } else { 
     simp->leftIntake.spin(fwd, 0, percentUnits::pct);
     simp->rightIntake.spin(fwd, 0, percentUnits::pct);
+    storageRoller();
   }
 }
 
@@ -71,7 +76,6 @@ void userControl::setDriveMode(){
 void userControl::driveLoop(){
   while(true){
     intakeM();
-    storageRoller();
     flyWheelToggle();
     setBrakeMode();
     setDriveMode();

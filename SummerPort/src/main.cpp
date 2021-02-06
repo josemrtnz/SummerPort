@@ -34,19 +34,16 @@ task startAuto(autoWrapper);
 
 void opControl(){
   
-  autoChasis.setPIDConstants(10000, 0, 0, 0, 
-                             10000, 0, 0, 0,
-                             10000, 0, 0, 0, 
-                             10000, 0, 0, 0,
-                             25, 0, 0, 0, 
-                             50, 0, 0, 0);
-  autoChasis.updateTargetPos(15, 15, 90);
+  autoChasis.setPIDConstants(1200, 5, 0, 2000, 
+                             1200, 5, 0, 2000,
+                             100, 5, 0, 2000);
+  autoChasis.updateTargetPos(0, 20, 0);
   autoChasis.waitUntilSettled();
   autoChasis.updateTargetPos(0, 0, 0);
   wait(100000, msec);
   
   startAuto.stop();
-
+ 
 
   userControl driveJose = userControl(&simp, true);
   driveJose.driveLoop();
