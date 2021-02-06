@@ -8,6 +8,9 @@ robotChasis::robotChasis( float wD, float tcL, float tcR, float tcB){
   sL = tcL;
   sR = tcR;
   sS = tcB;
+  rightTracker.resetRotation();
+  leftTracker.resetRotation();
+  backTracker.resetRotation();
 }
 
 void robotChasis::set_drive_break_type(brakeType B){

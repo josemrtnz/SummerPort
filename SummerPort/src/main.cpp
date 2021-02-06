@@ -9,7 +9,7 @@
 #include "vex.h"
 
 using namespace vex;
-robotChasis simp = robotChasis(3.3, 2.1, 2.1, 7.3);
+robotChasis simp = robotChasis(3.5, 2.4, 2.4, 7.6);
 odometry tracker = odometry(&simp, 0, 0, 0);
 autonomousControl autoChasis = autonomousControl(&simp, &tracker);
 
@@ -34,13 +34,13 @@ task startAuto(autoWrapper);
 
 void opControl(){
   
-  autoChasis.setPIDConstants(1200, 5, 0, 2000, 
-                             1200, 5, 0, 2000,
-                             100, 5, 0, 2000);
-  autoChasis.updateTargetPos(0, 20, 0);
+  autoChasis.setPIDConstants(3000, 0, 9000, 0, 
+                             3000, 0, 9000, 0,
+                             600, 0, 1800, 0);
+  autoChasis.updateTargetPos(10, 10, 0);
   autoChasis.waitUntilSettled();
-  autoChasis.updateTargetPos(0, 0, 0);
-  wait(100000, msec);
+  autoChasis.updateTargetPos(10, 10, 180);
+  wait(4000, msec);
   
   startAuto.stop();
  
