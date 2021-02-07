@@ -72,7 +72,7 @@ int odometry::updatePosition(){
     angleR += a;
     angleD = angleR * (180/simp->getPI());
     //Delays task so it does not hog all resources
-    task::sleep(5 - (simp->Brain.Timer.time(msec)-loopTime));
+    task::sleep(8 - (simp->Brain.Timer.time(msec)-loopTime));
   }
   return 1;
 }
