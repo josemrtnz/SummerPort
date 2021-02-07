@@ -37,10 +37,10 @@ void opControl(){
   autoChasis.setPIDConstants(2000, 10, 6000, 5000, 
                              2000, 10, 6000, 5000,
                              600, 0, 1800, 0);
-  autoChasis.updateTargetPos(0, 10, 0);
+  autoChasis.updateTargetPos(10, 10, 90);
   autoChasis.waitUntilSettled();
   autoChasis.updateTargetPos(0, 0, 0);
-  wait(4000, msec);
+  wait(8000, msec);
   
   startAuto.stop();
  
