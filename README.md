@@ -7,12 +7,12 @@
 The goals for this summer are as follows:
 
 ```
-1. Absolute Positioning.
-2. Strafing.
-3. Moving to a coordinate.
-4. Tune the movement to be fast, accurate, and precise.
-5. Turn while moving a distance.
-6. Arc turns.
+[x] Absolute Positioning.
+[x] Strafing.
+[x] Moving to a coordinate.
+[x] Tune the movement to be fast, accurate, and precise. *Improvements can be made here*
+[x] Turn while moving a distance.
+[x] Arc turns.
 ```
 
 ## Built With
@@ -27,7 +27,12 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 * **Jose Martinez** - *Programming Lead* - [josemrtnz](https://github.com/josemrtnz)
 * **Sergio Hernandez** - *Programmer* - [Sergio1452](https://github.com/Sergio1452)
+<<<<<<< HEAD
 * **Daniel Castellon** - *Programmer/CameraMan* [Turtlewax32](https://github.com/Turtlewax32)
+=======
+* **Daniel Castellon** - *Programmer/CameraMan* [Turtlewax32](https://github.com/mgomez1910)
+* **Matthew Gomez** - *Programmer* [mgomez1910](https://github.com/Turtlewax32)
+>>>>>>> GUCCI
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 

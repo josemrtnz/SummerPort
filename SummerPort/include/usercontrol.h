@@ -1,5 +1,25 @@
 #pragma once
-#include "vex.h"
+#include "robot-config.h"
+#include <math.h>
 
-void driveX();
-int * enterCoor();
+class userControl{
+  public:
+    void driveLoop();
+    userControl(robotChasis *robot, bool dM);
+
+  private:
+    robotChasis *simp;
+    bool driverMode;
+    bool flyWheelOn = false;
+    bool flyLastPress = false;
+    int a3, a4, a1;
+
+    void setDriveMode();
+    void driveM();
+    void driveMA();
+    void intakeM();
+    void storageRoller();
+    void flyWheelToggle();
+    void setBrakeMode();
+};
+

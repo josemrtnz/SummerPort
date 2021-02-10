@@ -1,304 +1,198 @@
 #include "chasisControl.h"
 
-////////////////////
-// PID Settings
-///////////
-
-// x PID Settings
-float xkP = 0; //1100
-float xkD = 0; //20
-float xkI = 0; //0
-
-float xError = 0; // EnvoderValue - Desired Value (The further you are from your target the bigger this number will be)
-float xPrevError = 0; // EncoderValue 20ms ago
-float xDerivative = 0; // error - previousError : Speed
-float xTotalError = 0; // totalError + error
-int xCap = 2000;
-///////////
-
-// y PID Settings
-float ykP = 0; //1100
-float ykD = 0; //10
-float ykI = 0; //0
-
-float yError = 0; // EnvoderValue - Desired Value (The further you are from your target the bigger this number will be)
-float yPrevError = 0; // EncoderValue 20ms ago
-float yDerivative = 0; // error - previousError : Speed
-float yTotalError = 0; // totalError + error
-int yCap = 2000;
-///////////
-
-// Turn PID Settings
-float turnkP = 280; //150
-float turnkD = 0; //700
-float turnkI = 0.75; //4
-
-float turnError = 0; // EnvoderValue - Desired Value (The further you are from your target the bigger this number will be)
-float turnPrevError = 0; // EncoderValue 20ms ago
-float turnDerivative = 0; // error - previousError : Speed
-float turnTotalError = 0; // totalError + error
-int turnCap = 500;
-///////////////////
-
-///////////
-// ~~~~~~~~~~~
-////////////////////
-
-// movAb settings
-double vMag;
-double vectorD[2];
-float xVoltage;
-float yVoltage;
-float angleVoltage;
-///////////////////
-
-///////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////
-// Controlls all motors in all directions
-void moveDrive(double x, double y, float turn){
-  frontLeft.spin( fwd, (x*cos(flbrWheels-angleR) + y*sin(flbrWheels-angleR)) + turn, voltageUnits::mV);
-  frontRight.spin(fwd, -(x*cos(frblWheels-angleR) + y*sin(frblWheels-angleR)) + turn, voltageUnits::mV);
-  backLeft.spin(fwd, (x*cos(frblWheels-angleR) + y*sin(frblWheels-angleR)) + turn, voltageUnits::mV);
-  backRight.spin(fwd, -(x*cos(flbrWheels-angleR) + y*sin(flbrWheels-angleR)) + turn, voltageUnits::mV);
-}
-//////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////
-// Sets each of the drive motors to the coast brake mode
-void coastMotor(){
-  frontLeft.setBrake(coast);
-  frontRight.setBrake(coast);
-  backLeft.setBrake(coast);
-  backRight.setBrake(coast);
-}
-//////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////
-// Sets each of the drive motors to the hold brake mode
-void holdMotor(){
-  frontLeft.setBrake(hold);
-  frontRight.setBrake(hold);
-  backLeft.setBrake(hold);
-  backRight.setBrake(hold);
-}
-//////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////
-
-void stopMotors(){
-  frontLeft.stop();
-  frontRight.stop();
-  backLeft.stop();
-  backRight.stop();
+autonomousControl::autonomousControl(robotChasis *robot, odometry *tr){
+  simp = robot;
+  tracking = tr;
 }
 
-//////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////
-// Gets the average RPM of all the drive motors.
-int averageRPM(){
-  return (fabs(frontRight.velocity(rpm)) + fabs(frontLeft.velocity(rpm)) + fabs(backRight.velocity(rpm)) + fabs(backLeft.velocity(rpm)))/4;
+void autonomousControl::setPIDConstants(float xkP, float xkI, float xkD, int xCap,
+                                        float ykP, float ykI, float ykD, int yCap,
+                                        float turnkP, float turnkI, float turnkD, int turnCap){
+  xPID.kP = xkP; xPID.kI = xkI; xPID.kD = xkD; xPID.cap = xCap;
+  yPID.kP = ykP; yPID.kI = ykI; yPID.kD = ykD; yPID.cap = yCap;
+  turnPID.kP = turnkP; turnPID.kI = turnkI; turnPID.kD = turnkD; turnPID.cap = turnCap;                         
 }
-//////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////
-double xPID(double inchTarget, double currentInch){
-  xError = currentInch - inchTarget;
-  xDerivative = xError - xPrevError;
-  xTotalError += xError;
-
-  if((xTotalError*xkI)>xCap) xTotalError = xCap/xkI;
-  else if((xTotalError*xkI)<-xCap) xTotalError = -xCap/xkI;
-
-  return -(xkP*xError + xkD*xDerivative + xkI*xTotalError);
+void autonomousControl::moveDrive(float x, float y, float turn){
+  simp->frontLeft.spin( fwd, -(x*cos(simp->get_flbr()-tracking->getangleR()) + y*sin(simp->get_flbr()-tracking->getangleR())) - turn, voltageUnits::mV);
+  simp->frontRight.spin(fwd, (x*cos(simp->get_frbl()-tracking->getangleR()) + y*sin(simp->get_frbl()-tracking->getangleR())) - turn, voltageUnits::mV);
+  simp->backLeft.spin(fwd, -(x*cos(simp->get_frbl()-tracking->getangleR()) + y*sin(simp->get_frbl()-tracking->getangleR())) - turn, voltageUnits::mV);
+  simp->backRight.spin(fwd, (x*cos(simp->get_flbr()-tracking->getangleR()) + y*sin(simp->get_flbr()-tracking->getangleR())) - turn, voltageUnits::mV);
 }
-//////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////
-double yPID(double inchTarget, double currentInch){
-  yError = currentInch - inchTarget;
-  yDerivative = yError - yPrevError;
-  yTotalError += yError;
-
-  if((yTotalError*ykI)>yCap) yTotalError = yCap/ykI;
-  else if((yTotalError*ykI)<-yCap) yTotalError = -yCap/ykI;
-
-  return -(ykP*yError + ykD*yDerivative + ykI*yTotalError);
+float autonomousControl::averageRPM(){
+  return (fabs(simp->frontRight.velocity(rpm)) + fabs(simp->frontLeft.velocity(rpm)) + fabs(simp->backRight.velocity(rpm)) + fabs(simp->backLeft.velocity(rpm)))/4;
 }
-//////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////
-double updateTurnPID(float angleTarget, float currentAngle){
-  turnError = currentAngle - angleTarget;
-  turnDerivative = turnError - turnPrevError;
-  turnTotalError += turnError;
+float autonomousControl::updatePID(PIDSettings *good){
+  good->error = good->curr - good->target;
+  good->derivative = good->error - good->prevError;
+  good->totalError = good->totalError + good->error;
 
-  if((turnTotalError*turnkI)>turnCap) turnTotalError = turnCap/turnkI;
-  else if((turnTotalError*turnkI)<-turnCap) turnTotalError = -turnCap/turnkI;
+  if((good->totalError*good->kI)>good->cap) good->totalError = good->cap/good->kI;
+  else if((good->totalError*good->kI)<-good->cap)good->totalError = -good->cap/good->kI;
 
-  return (turnkP*turnError + turnkD*turnDerivative + turnkI*turnTotalError);
+  if(std::signbit(good->error) != std::signbit(good->prevError)) good->totalError = 0;
+
+  good->prevError = good->error;
+  return -(good->kP*good->error + good->kD*good->derivative + good->kI*good->totalError);
 }
-//////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////
-int turningCap(double distanceMag){
+int autonomousControl::turnCap(float distanceMag){
   if(distanceMag>30.0) return 2000;
   else if(distanceMag<10.0) return 6000;
   else return (-200*distanceMag) + 8000;
 }
-//////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////
-void betterPID(){
-  if(fabs(vectorD[0])>39.0){
-    xkP = 1000;
-    xkD = 0;
-    xkI = 1.2; 
-    xCap = 1100;
-  }else if(fabs(vectorD[0])>30.0){
-    xkP = 1000;
-    xkD = 0;
-    xkI = 0.8; 
-    xCap = 1200;
-  } else if(fabs(vectorD[0])>20.0){
-    xkP = 1200;
-    xkD = 0;
-    xkI = 0.9; 
-    xCap = 2000;
-  } else if(fabs(vectorD[0])>10.0){
-    xkP = 1300;
-    xkD = 0;
-    xkI = 0.7; 
-    xCap = 2000;
-  } else if(fabs(vectorD[0])>5.0){
-    xkP = 1600;
-    xkD = 0;
-    xkI = 0.5; 
-    xCap = 2000;
-  } else {
-    xkP = 3500;
-    xkD = 0;
-    xkI = 1.2; 
-    xCap = 2000;
+void autonomousControl::movAB(){
+  updateCurrPos();
+  vectorD[0] = xPID.target - xPID.curr;
+  vectorD[1] = yPID.target - yPID.curr;
+  vMag = sqrt((vectorD[0]*vectorD[0]) + (vectorD[1]*vectorD[1])); 
+
+  int turningCap = turnCap(vMag);
+
+  float xVoltage = updatePID(&xPID);
+  float yVoltage = updatePID(&yPID);
+  float angleVoltage = updatePID(&turnPID);
+
+  if(angleVoltage>turningCap) angleVoltage = turningCap;
+  else if(angleVoltage<-turningCap) angleVoltage = -turningCap;
+
+  if(xVoltage>10000) xVoltage = 10000;
+  else if(xVoltage<-10000) xVoltage = -10000;
+
+  if(yVoltage>10000) yVoltage = 10000;
+  else if(yVoltage<-10000) yVoltage = -10000;
+
+  moveDrive(xVoltage, yVoltage, angleVoltage);  
+}
+
+void autonomousControl::updateTargetPos(float x, float y, int angleO){
+  xPID.target = x;
+  yPID.target = y;
+  turnPID.target = angleO;
+}
+
+void autonomousControl::updateIntakePct(int pow){ intakePct = pow; }
+
+void autonomousControl::updateFlyTBH(){
+
+  flyError = flyWheelRPM - simp->flyOuttake.velocity(rpm);
+  flyVoltage += flykI*flyError;
+
+  // Clip
+  if (flyVoltage > 12000) flyVoltage = 12000;
+  else if (flyVoltage < lowerBound) flyVoltage = lowerBound;
+
+  // Zero crossing
+  if (std::signbit(flyError) != std::signbit(flyLastError)){
+    if( firstCross ){
+      flyVoltage = flyApprox;
+      firstCross = false;
+    } else flyVoltage = 0.5 * (flyVoltage + flyZero);
+    flyZero = flyVoltage;
   }
+  flyLastError = flyError;
+}
 
-  if(fabs(vectorD[1])>39.0){
-    ykP = 1000;
-    ykD = 0;
-    ykI = 1.2;
-    yCap = 1100;
-  }else if(fabs(vectorD[1])>30.0){
-    ykP = 1000;
-    ykD = 0;
-    ykI = .8;
-    yCap = 1200;
-  } else if(fabs(vectorD[1])>20.0){
-    ykP = 1200;
-    ykD = 0;
-    ykI = 0.9;
-    yCap = 2000;
-  } else if(fabs(vectorD[1])>10.0){
-    ykP = 1300;
-    ykD = 0;
-    ykI = 0.7;
-    yCap = 2000;
-  } else if(fabs(vectorD[1])>5.0){
-    ykP = 1600;
-    ykD = 0;
-    ykI = 0.5;
-    yCap = 2000;
-  } else {
-    ykP = 3500;
-    ykD = 0;
-    ykI = 1.2;
-    yCap = 2000;
+void autonomousControl::intakeMove(){
+  simp->leftIntake.spin(fwd, intakePct, pct);
+  simp->rightIntake.spin(fwd, intakePct, pct);
+}
+
+void autonomousControl::flyMove(){
+  updateFlyTBH();
+  simp->flyOuttake.spin(fwd, flyVoltage, voltageUnits::mV);
+}
+
+void autonomousControl::rollerMove(){ simp->rollerIntake.spin(fwd, rollerPct, pct); }
+
+void autonomousControl::waitUntilSettled(){
+  wait(100, msec);
+  while(averageRPM() != 0){
+    wait(20, msec);
   }
 }
-//////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////
-void movAb(float x, float y, int angleO, int timeOut){
+void autonomousControl::waitTilFull(){
+  wait(100, msec);
+  while(simp->shootD.pressing() == false){
+    wait(20, msec);
+  }
+  wait(500, msec);
+}
 
-  coastMotor();
-  wait(20, msec);
-  int currTime = Brain.Timer.time(msec);
+void autonomousControl::waitUntilDistance(float dis){
+  wait(50, msec);
+  while(dis < vMag){
+    wait(20, msec);
+  }
+}
 
-  vectorD[0] = x - xPos;
-  vectorD[1] = y - yPos;
-  vMag = sqrt((vectorD[0]*vectorD[0]) + (vectorD[1]*vectorD[1]));
-  betterPID();
+void autonomousControl::waitUntilBalls(int ball){
+}
+
+void autonomousControl::updateFly(int rpm){
+  flyApprox = 10000;
+  flyError = 0;
+  flyLastError = 0;
+  flyVoltage = 0;
+  flyZero = 8000;
+  lowerBound = 5000;
+  firstCross = true;
+  flyWheelRPM = rpm;
+}
+
+void autonomousControl::stopFly(){
+  flyApprox = 0;
+  flyError = 0;
+  flyLastError = 0;
+  flyVoltage = 0;
+  flyZero = 0;
+  lowerBound = 0;
+  firstCross = true;
+  flyWheelRPM = 0;
+}
+
+void autonomousControl::updateRoller(int pwr){ rollerPct = pwr; }
+
+void autonomousControl::shootBall(int balls){
+  ballsDeteced = 0;
+  ballsToShoot = balls;
+  shooting = true;
+}
+
+void autonomousControl::shootingBall(){
+  if (shooting == true){
+    rollerPct = 100;
+
+    if ((prevShot == true) && (simp->shootD.pressing() == false)){
+      ballsDeteced++;
+      if (ballsDeteced == ballsToShoot){
+        rollerPct = 0;
+        shooting = false;
+      }
+    }
+    prevShot = simp->shootD.pressing();
+  }
+}
+
+void autonomousControl::autoMain(){
+  simp->set_drive_break_type(coast);
 
   while(true){
-
-    vectorD[0] = x - xPos;
-    vectorD[1] = y - yPos;
-    vMag = sqrt((vectorD[0]*vectorD[0]) + (vectorD[1]*vectorD[1]));
-
-    //////////////////////////////////////////////////
-    // Caps go here
-
-    int turnCap = turningCap(vMag);
-
-    xVoltage = xPID(x, xPos);
-    yVoltage = yPID(y, yPos);
-    angleVoltage = updateTurnPID(angleO, angleD);
-
-    if(angleVoltage>turnCap) angleVoltage = turnCap;
-    else if(angleVoltage<-turnCap) angleVoltage = -turnCap;
-
-    if(xVoltage>10000) xVoltage = 10000;
-    else if(xVoltage<-10000) xVoltage = -10000;
-
-    if(yVoltage>10000) yVoltage = 10000;
-    else if(yVoltage<-10000) yVoltage = -10000;
-
-    //////////////////////////////////////////////////
-
-    moveDrive(xVoltage, yVoltage, -angleVoltage);
-
-    wait(20, msec);
-
-    //PID exits when bot is within 0.25in from target, average motor RPM is less than 10, and angle difference is less than .5 degrees
-    if((vMag < .45 && averageRPM()<5 && fabs(angleO-angleD)<1.0) || (Brain.Timer.time(msec)-currTime)>timeOut) { 
-      xTotalError = 0;
-      yTotalError = 0;
-      turnError = 0;
-      holdMotor();
-      stopMotors();
-      break;
-    }
-
+    movAB();
+    shootingBall();
+    intakeMove();
+    rollerMove();
+    flyMove();
+    task::sleep(20);
   }
 }
-//////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////
-
-void arcTurn(float x, float y, float angleO, float arcRad){
-
+void autonomousControl::updateCurrPos(){
+  xPID.curr = tracking->getXPos();
+  yPID.curr = tracking->getYPos();
+  turnPID.curr = tracking->getangleD();
 }
-
-//////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

@@ -1,48 +1,52 @@
-#include "vex.h"
+#include <stdio.h>
+#include "robot-config.h"
 
 using namespace vex;
 
-// A global instance of brain used for printing to the V5 Brain screen
-brain  Brain;
-competition Comp;
-
-// VEXcode device constructors
-controller Controller1 = controller(primary);
-
-motor frontRight = motor(PORT4, ratio18_1, false);
-motor frontLeft = motor(PORT1, ratio18_1, false);
-motor backLeft = motor(PORT2, ratio18_1, false);
-motor backRight = motor(PORT3, ratio18_1, false);
-
-encoder leftTracker = encoder(Brain.ThreeWirePort.A);
-encoder rightTracker = encoder(Brain.ThreeWirePort.G);
-encoder backTracker = encoder(Brain.ThreeWirePort.C);
-
-float wheelRadius = 3.0; //JK its diameter
-double pi = 3.14159265359; // (355/113) pi aproximation
-double wheelCir = wheelRadius*pi;
-float sL = 6.75;
-float sR = 6.75;
-float sS = 9;
-
-float frblWheels = 2.35619449;
-float flbrWheels = 0.7853981634;
-
-float xPos = 0;
-float yPos = 0;
-float angleD = 0;
-float angleR = 0;
-/**
- * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
- * 
- * This should be called at the start of your int main function.
- */
-void vexcodeInit( void ) {
-  // nothing to initialize
-  leftTracker.resetRotation();
+robotChasis::robotChasis( float wD, float tcL, float tcR, float tcB){
+  wheelDiameter = wD;
+  sL = tcL;
+  sR = tcR;
+  sS = tcB;
   rightTracker.resetRotation();
+  leftTracker.resetRotation();
   backTracker.resetRotation();
-  wait(1000, msec);
-  printf("%.0lf, %.0lf, %.0lf \n", leftTracker.position(deg), rightTracker.position(deg), backTracker.position(deg));
-  task trackingP(trackingPylons);
+}
+
+void robotChasis::set_drive_break_type(brakeType B){
+  frontLeft.setBrake(B);
+  frontRight.setBrake(B);
+  backLeft.setBrake(B);
+  backRight.setBrake(B);
+}
+
+void robotChasis::stopMotors(){
+  frontLeft.stop();
+  frontRight.stop();
+  backLeft.stop();
+  backRight.stop();
+}
+
+double robotChasis::getPI() { return PI; }
+float robotChasis::get_flbr() { return flbrWheels; }
+float robotChasis::get_frbl(){ return frblWheels; }
+float robotChasis::getsL() { return sL; }
+float robotChasis::getsR() { return sR; }
+float robotChasis::getsS() { return sS; }
+double robotChasis::getWheelCir(){ return PI * wheelDiameter; }
+
+void vexcodeInit(robotChasis *simp) {
+  simp->leftTracker.resetRotation();
+  simp->rightTracker.resetRotation();
+  simp->backTracker.resetRotation();
+
+  wait(500, msec);
+  // Gyro Callibrates
+  simp->gyroM.calibrate();
+  while(simp->gyroM.isCalibrating()){
+    wait(50, msec);
+  }
+
+  // Prints the values of the tracking wheels in degrees.
+  printf("%.0lf, %.0lf, %.0lf \n", simp->leftTracker.position(deg), simp->rightTracker.position(deg), simp->backTracker.position(deg));
 }

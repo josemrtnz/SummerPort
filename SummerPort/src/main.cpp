@@ -6,54 +6,63 @@
 /*    Description:  V5 project                                                */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
-
 #include "vex.h"
 
 using namespace vex;
+robotChasis simp = robotChasis(3.2, 2.1, 2.1, 7.4);
+odometry tracker = odometry(&simp, 0, 0, 0);
+autonomousControl autoChasis = autonomousControl(&simp, &tracker);
+
+int trackerWrapper(){
+  tracker.updatePosition();
+  return 0;
+}
+
+int printerWrapper(){
+  tracker.updateScreen();
+  return 0;
+}
+
+int autoWrapper(){
+  autoChasis.autoMain();
+  return 0;
+}
+
+task startTracking(trackerWrapper);
+task startPrinting(printerWrapper);
+task startAuto(autoWrapper);
 
 void opControl(){
-  task debugPrint(updateScreen);
-  int *p;
+  
+  autoChasis.setPIDConstants(2000, 10, 6000, 5000, 
+                             2000, 10, 6000, 5000,
+                             600, 0, 1800, 0);
+  autoChasis.updateTargetPos(10, 10, 90);
+  autoChasis.waitUntilSettled();
+  autoChasis.updateTargetPos(0, 0, 0);
+  wait(8000, msec);
+  
+  startAuto.stop();
+ 
 
-  movAb(-22.5, 50, 0, 2000);
-  movAb(-22.5, 35, 0, 2000);
-  movAb(-3, 50, 30, 2000);
-  movAb(-43, 51, -30, 2000);
-  movAb(-30, 21, -120, 2000);
-  movAb(-40, 11, -120, 2000);
-  movAb(-12, 12, -90, 2000);
-  movAb(14, 13, -180, 2000);
-  movAb(14, 7, -180, 2000);
-  movAb(68, 7, -225, 2000);
-
-
-  while(1){
-    driveX();
-
-    if(Controller1.ButtonB.pressing()) movAb(0, 0, 0, 2000);
-    if(Controller1.ButtonA.pressing()){
-      debugPrint.suspend();
-      p = enterCoor();
-      debugPrint.resume();
-      movAb(*p, *(p+1), 0, 2000);
-    }
-
-    wait(30, msec);
-  }
+  userControl driveJose = userControl(&simp, true);
+  driveJose.driveLoop();
 }
 
 void autonM(){
+}
 
+void disabledR(){
 }
 
 int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
-  vexcodeInit();
-  Comp.drivercontrol(opControl);
-  Comp.autonomous(autonM);
+  vexcodeInit(&simp);
+  simp.Comp.drivercontrol(opControl);
+  simp.Comp.autonomous(autonM);
 
   while(1){
-
+    if(!simp.Comp.isEnabled()) disabledR();
     wait(100, msec);
   }
 }
