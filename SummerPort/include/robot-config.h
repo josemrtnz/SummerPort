@@ -59,20 +59,20 @@ class robotChasis{
 
     controller Controller1;
 
-    motor frontRight = motor(PORT16, ratio18_1, false);
-    motor frontLeft = motor(PORT15, ratio18_1, false);
-    motor backLeft = motor(PORT11, ratio18_1, false);
-    motor backRight = motor(PORT12, ratio18_1, false);
+    motor frontRight = motor(PORT9, ratio18_1, false);
+    motor frontLeft = motor(PORT8, ratio18_1, false);
+    motor backLeft = motor(PORT20, ratio18_1, false);
+    motor backRight = motor(PORT10, ratio18_1, false);
 
-    motor leftIntake = motor(PORT8, ratio6_1, true);
-    motor rightIntake = motor(PORT20, ratio6_1, true);
-    motor flyOuttake = motor(PORT7, ratio6_1, true);
-    motor rollerIntake = motor(PORT9, ratio6_1, true);
+    motor leftIntake = motor(PORT16, ratio6_1, true);
+    motor rightIntake = motor(PORT7, ratio6_1, true);
+    motor flyOuttake = motor(PORT13, ratio6_1, true);
+    motor rollerIntake = motor(PORT11, ratio6_1, true);
 
     encoder leftTracker = encoder(Brain.ThreeWirePort.A);
     encoder rightTracker = encoder(Brain.ThreeWirePort.C);
     encoder backTracker = encoder(Brain.ThreeWirePort.E);
-    limit shootD = limit(Brain.ThreeWirePort.H);
+    limit shootD = limit(Brain.ThreeWirePort.A);
 
     inertial gyroM = inertial(PORT20);
 
