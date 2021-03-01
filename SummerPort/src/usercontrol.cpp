@@ -10,7 +10,12 @@ void userControl::flyWheelToggle(){
   if ((flyLastPress == false) && simp->Controller1.ButtonX.pressing()) flyWheelOn = !flyWheelOn;
   flyLastPress = simp->Controller1.ButtonX.pressing();
 
-  if(flyWheelOn) simp->flyOuttake.spin(fwd, 100, pct);
+  if ((flySpeedToggle == false) && simp->Controller1.ButtonY.pressing()) flyFast = !flyFast;
+  flySpeedToggle = simp->Controller1.ButtonY.pressing();
+
+  flyWheelPow = flyFast ? 100 : 80;
+
+  if(flyWheelOn) simp->flyOuttake.spin(fwd, flyWheelPow, pct);
   else simp->flyOuttake.spin(fwd, 0, pct);
 }
 
