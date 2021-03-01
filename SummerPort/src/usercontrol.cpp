@@ -3,6 +3,7 @@
 userControl::userControl(robotChasis *robot, bool dM){
   simp = robot;
   driverMode = dM;
+  simp->set_drive_break_type(coast);
 }
 
 void userControl::flyWheelToggle(){

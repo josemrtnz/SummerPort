@@ -69,9 +69,9 @@ class robotChasis{
     motor flyOuttake = motor(PORT13, ratio6_1, true);
     motor rollerIntake = motor(PORT11, ratio6_1, true);
 
-    encoder leftTracker = encoder(Brain.ThreeWirePort.A);
-    encoder rightTracker = encoder(Brain.ThreeWirePort.C);
-    encoder backTracker = encoder(Brain.ThreeWirePort.E);
+    encoder leftTracker = encoder(Brain.ThreeWirePort.G);
+    encoder rightTracker = encoder(Brain.ThreeWirePort.E);
+    encoder backTracker = encoder(Brain.ThreeWirePort.C);
     limit shootD = limit(Brain.ThreeWirePort.A);
 
     inertial gyroM = inertial(PORT20);
