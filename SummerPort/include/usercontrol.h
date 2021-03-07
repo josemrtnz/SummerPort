@@ -13,6 +13,9 @@ class userControl{
     bool flyWheelOn = false;
     bool flyLastPress = false;
     int a3, a4, a1;
+    int flyWheelPow;
+    bool flySpeedToggle = false;
+    bool flyFast = true;
 
     void setDriveMode();
     void driveM();
