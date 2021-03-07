@@ -31,14 +31,14 @@ int odometry::updatePosition(){
     loopTime = simp->Brain.Timer.time(msec);
 
     //The change in encoder values since last cycle in inches
-    deltaL = simp->getWheelCir() * (simp->leftTracker.rotation(deg) - prevLeftEnc)/360;
-    deltaR = simp->getWheelCir() * (simp->rightTracker.rotation(deg) - prevRightEnc)/360;
-    deltaS = simp->getWheelCir() * (simp->backTracker.rotation(deg) - prevBackEnc)/360;
+    deltaL = simp->getWheelCir() * (simp->leftTracker.position(deg) - prevLeftEnc)/360;
+    deltaR = simp->getWheelCir() * (simp->rightTracker.position(deg) - prevRightEnc)/360;
+    deltaS = simp->getWheelCir() * (simp->backTracker.position(deg) - prevBackEnc)/360;
 
     //Update previous value of the encoders
-    prevLeftEnc = simp->leftTracker.rotation(deg);
-    prevRightEnc = simp->rightTracker.rotation(deg);
-    prevBackEnc = simp->backTracker.rotation(deg);
+    prevLeftEnc = simp->leftTracker.position(deg);
+    prevRightEnc = simp->rightTracker.position(deg);
+    prevBackEnc = simp->backTracker.position(deg);
 
     float h;
     float i;

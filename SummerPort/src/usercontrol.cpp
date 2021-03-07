@@ -49,10 +49,17 @@ void userControl::driveM(){
   a4 = simp->Controller1.Axis4.position(pct) * 120;
   a1 = simp->Controller1.Axis1.position(pct) * 120;
 
-  simp->frontRight.spin(fwd, a3 - a4 - a1, voltageUnits::mV);
-  simp->frontLeft.spin(fwd, -a3 - a4 - a1, voltageUnits::mV);
-  simp->backRight.spin(fwd, a3 + a4 - a1, voltageUnits::mV);
-  simp->backLeft.spin(fwd, -a3 + a4 - a1, voltageUnits::mV);
+  if((a3 > 960) || (a4 > 960) || (a1 > 960)){
+    simp->frontRight.spin(fwd, a3 - a4 - a1, voltageUnits::mV);
+    simp->frontLeft.spin(fwd, -a3 - a4 - a1, voltageUnits::mV);
+    simp->backRight.spin(fwd, a3 + a4 - a1, voltageUnits::mV);
+    simp->backLeft.spin(fwd, -a3 + a4 - a1, voltageUnits::mV);
+  } else {
+    simp->frontRight.spin(fwd, 0, voltageUnits::mV);
+    simp->frontLeft.spin(fwd, 0, voltageUnits::mV);
+    simp->backRight.spin(fwd, 0, voltageUnits::mV);
+    simp->backLeft.spin(fwd, 0, voltageUnits::mV);
+  }
 }
 
 void userControl::driveMA(){
