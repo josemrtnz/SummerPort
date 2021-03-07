@@ -55,7 +55,7 @@ void userControl::driveM(){
   a4 = simp->Controller1.Axis4.position(pct) * 120;
   a1 = simp->Controller1.Axis1.position(pct) * 120;
 
-  if((a3 > 960) || (a4 > 960) || (a1 > 960)){
+  if((std::abs(a3) > 960) || (std::abs(a4) > 960) || (std::abs(a1) > 960)){
     simp->frontRight.spin(fwd, a3 - a4 - a1, voltageUnits::mV);
     simp->frontLeft.spin(fwd, -a3 - a4 - a1, voltageUnits::mV);
     simp->backRight.spin(fwd, a3 + a4 - a1, voltageUnits::mV);
