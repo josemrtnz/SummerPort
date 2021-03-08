@@ -34,7 +34,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 * **Matthew Gomez** - *Programmer* [mgomez1910](https://github.com/Turtlewax32)
 >>>>>>> GUCCI
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/josemrtnz/SummerPort/graphs/contributors) who participated in this project.
 
 ## License
 
