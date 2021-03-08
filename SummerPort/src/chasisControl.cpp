@@ -14,7 +14,7 @@ void autonomousControl::setPIDConstants(float xkP, float xkI, float xkD, int xCa
 }
 
 void autonomousControl::moveDrive(float x, float y, float turn){
-  simp->frontLeft.spin( fwd, -(x*cos(simp->get_flbr()-tracking->getangleR()) + y*sin(simp->get_flbr()-tracking->getangleR())) - turn, voltageUnits::mV);
+  simp->frontLeft.spin(fwd, -(x*cos(simp->get_flbr()-tracking->getangleR()) + y*sin(simp->get_flbr()-tracking->getangleR())) - turn, voltageUnits::mV);
   simp->frontRight.spin(fwd, (x*cos(simp->get_frbl()-tracking->getangleR()) + y*sin(simp->get_frbl()-tracking->getangleR())) - turn, voltageUnits::mV);
   simp->backLeft.spin(fwd, -(x*cos(simp->get_frbl()-tracking->getangleR()) + y*sin(simp->get_frbl()-tracking->getangleR())) - turn, voltageUnits::mV);
   simp->backRight.spin(fwd, (x*cos(simp->get_flbr()-tracking->getangleR()) + y*sin(simp->get_flbr()-tracking->getangleR())) - turn, voltageUnits::mV);
