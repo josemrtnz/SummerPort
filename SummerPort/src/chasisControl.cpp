@@ -41,7 +41,7 @@ float autonomousControl::updatePID(PIDSettings *good){
 int autonomousControl::turnCap(float distanceMag){
   if(distanceMag>30.0) return 2000;
   else if(distanceMag<10.0) return 6000;
-  else return (-200*distanceMag) + 8000;
+  else return (-100*distanceMag) + 10000;
 }
 
 void autonomousControl::movAB(){

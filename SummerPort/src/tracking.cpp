@@ -92,6 +92,7 @@ int odometry::updateScreen(){
     simp->Controller1.Screen.newLine();
     simp->Controller1.Screen.print("Angle: %.1f°    ", angleD);
     //simp->Controller1.Screen.print("left tracker: %.1lf     ", simp->leftTracker.position(deg));
+    //simp->Controller1.Screen.print("back tracker: %.1lf     ", simp->backTracker.position(deg));
     // Controller1.Screen.print("Drive mV: %.0lf");
 
     // Prints information about the bot to the console
