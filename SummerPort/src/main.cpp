@@ -12,6 +12,7 @@ using namespace vex;
 robotChasis simp = robotChasis(3.0, 5.5, 5.5, 5);
 odometry tracker = odometry(&simp, 0, 0, 0);
 autonomousControl autoChasis = autonomousControl(&simp, &tracker);
+autonomousRoutine autoRoutine = autonomousRoutine(&autoChasis);
 
 int trackerWrapper(){
   tracker.updatePosition();
@@ -32,21 +33,8 @@ task startTracking(trackerWrapper);
 task startPrinting(printerWrapper);
 task startAuto(autoWrapper);
 
-void opControl(){
-  
-  autoChasis.setPIDConstants(1500, 10, 5000, 4000, 
-                             1500, 10, 5000, 4000,
-                             800, 0, 3000, 0);
-                             
-  autoChasis.updateTargetPos(0, 48, 0);
-  autoChasis.waitUntilSettled();
-  autoChasis.updateTargetPos(-20, 48, -90);
-  autoChasis.waitUntilSettled();
-  autoChasis.updateTargetPos(0, 48, 0);
-  autoChasis.waitUntilSettled();
-  autoChasis.updateTargetPos(0, 0, 0);
-  wait(8000, msec);
-  
+void opControl(){                             
+  autoRoutine.run();
   startAuto.stop();
  
 
@@ -55,6 +43,7 @@ void opControl(){
 }
 
 void autonM(){
+  autoRoutine.run();
 }
 
 void disabledR(){
