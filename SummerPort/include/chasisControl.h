@@ -2,7 +2,6 @@
 
 #include "robot-config.h"
 #include "tracking.h"
-
 #include <cmath>
 
 class autonomousControl{
