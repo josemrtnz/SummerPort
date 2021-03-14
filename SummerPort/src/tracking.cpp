@@ -31,8 +31,10 @@ int odometry::updatePosition(){
     loopTime = simp->Brain.Timer.time(msec);
 
     //The change in encoder values since last cycle in inches
-    deltaL = simp->getWheelCir() * (simp->leftTracker.position(deg) - prevLeftEnc)/360;
-    deltaR = simp->getWheelCir() * (simp->rightTracker.position(deg) - prevRightEnc)/360;
+    //deltaL = simp->getWheelCir() * (simp->leftTracker.position(deg) - prevLeftEnc)/360;
+    //deltaR = simp->getWheelCir() * (simp->rightTracker.position(deg) - prevRightEnc)/360;
+    deltaL = 12.57 * (simp->leftTracker.position(deg) - prevLeftEnc)/360;
+    deltaR = 12.57 * (simp->rightTracker.position(deg) - prevRightEnc)/360;
     deltaS = simp->getWheelCir() * (simp->backTracker.position(deg) - prevBackEnc)/360;
 
     //Update previous value of the encoders
@@ -88,11 +90,11 @@ int odometry::updateScreen(){
     // Prints the x and y coordinates and angle the bot is facing to the Controller.
     simp->Controller1.Screen.setCursor(0, 0);
     simp->Controller1.Screen.print("x: %.1fin y: %.1fin     ", xPos, yPos);
-    //simp->Controller1.Screen.print("right tracker: %.1lf     ", simp->rightTracker.position(deg));
+    //simp->Controller1.Screen.print("right: %.1lf     ", simp->rightTracker.position(deg));
     simp->Controller1.Screen.newLine();
     simp->Controller1.Screen.print("Angle: %.1f°    ", angleD);
-    //simp->Controller1.Screen.print("left tracker: %.1lf     ", simp->leftTracker.position(deg));
-    //simp->Controller1.Screen.print("back tracker: %.1lf     ", simp->backTracker.position(deg));
+    //simp->Controller1.Screen.print("left: %.1lf     ", simp->leftTracker.position(deg));
+    //simp->Controller1.Screen.print("back: %.1lf     ", simp->backTracker.position(deg));
     // Controller1.Screen.print("Drive mV: %.0lf");
 
     // Prints information about the bot to the console
