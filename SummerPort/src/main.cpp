@@ -34,9 +34,7 @@ task startPrinting(printerWrapper);
 task startAuto(autoWrapper);
 
 void opControl(){                             
-  autoRoutine.run();
   startAuto.stop();
- 
   userControl driveJose = userControl(&simp, true);
   driveJose.driveLoop();
 }
