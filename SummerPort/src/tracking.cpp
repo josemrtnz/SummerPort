@@ -33,8 +33,8 @@ int odometry::updatePosition(){
     //The change in encoder values since last cycle in inches
     //deltaL = simp->getWheelCir() * (simp->leftTracker.position(deg) - prevLeftEnc)/360;
     //deltaR = simp->getWheelCir() * (simp->rightTracker.position(deg) - prevRightEnc)/360;
-    deltaL = 12.57 * (simp->leftTracker.position(deg) - prevLeftEnc)/360;
-    deltaR = 12.57 * (simp->rightTracker.position(deg) - prevRightEnc)/360;
+    deltaL = 8.639 * (simp->leftTracker.position(deg) - prevLeftEnc)/360;
+    deltaR = 8.639 * (simp->rightTracker.position(deg) - prevRightEnc)/360;
     deltaS = simp->getWheelCir() * (simp->backTracker.position(deg) - prevBackEnc)/360;
 
     //Update previous value of the encoders
