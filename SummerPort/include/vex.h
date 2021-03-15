@@ -22,6 +22,7 @@
 #include "tracking.h"
 #include "usercontrol.h"
 #include "chasisControl.h"
+#include "autonomousRoutine.h"
 
 #define waitUntil(condition)                                                   \
   do {                                                                         \
