@@ -7,16 +7,16 @@ class odometry{
 public:
   int updatePosition();
   int updateScreen();
-  float getXPos();
-  float getYPos();
-  float getangleR();
-  float getangleD();
-  odometry(robotChasis *robot, float x, float y, float deg);
+  double getXPos();
+  double getYPos();
+  double getangleR();
+  double getangleD();
+  odometry(robotChasis *robot, double x, double y, double deg);
 
 private:
-  float xPos;
-  float yPos;
-  float angleR;
-  float angleD;
+  double xPos;
+  double yPos;
+  double angleR;
+  double angleD;
   robotChasis *simp;
 };

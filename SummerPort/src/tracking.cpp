@@ -1,7 +1,7 @@
 #include "tracking.h"
 
 
-odometry::odometry(robotChasis *robot, float x, float y, float deg){
+odometry::odometry(robotChasis *robot, double x, double y, double deg){
   simp = robot;
   xPos = x;
   yPos = y;
@@ -9,19 +9,19 @@ odometry::odometry(robotChasis *robot, float x, float y, float deg){
   angleR = 0;
 }
 
-float odometry::getangleD(){ return angleD; }
-float odometry::getangleR(){ return angleR; }
-float odometry::getXPos(){ return xPos; }
-float odometry::getYPos(){ return yPos; }
+double odometry::getangleD(){ return angleD; }
+double odometry::getangleR(){ return angleR; }
+double odometry::getXPos(){ return xPos; }
+double odometry::getYPos(){ return yPos; }
 
 int odometry::updatePosition(){
   double loopTime;
   double deltaL;
   double deltaR;
   double deltaS;
-  float prevLeftEnc = 0;
-  float prevRightEnc = 0;
-  float prevBackEnc = 0;
+  double prevLeftEnc = 0;
+  double prevRightEnc = 0;
+  double prevBackEnc = 0;
   
 
   // This loop will update the x and y position and angle the bot is facing
@@ -33,8 +33,8 @@ int odometry::updatePosition(){
     //The change in encoder values since last cycle in inches
     //deltaL = simp->getWheelCir() * (simp->leftTracker.position(deg) - prevLeftEnc)/360;
     //deltaR = simp->getWheelCir() * (simp->rightTracker.position(deg) - prevRightEnc)/360;
-    deltaL = 8.639 * (simp->leftTracker.position(deg) - prevLeftEnc)/360;
-    deltaR = 8.639 * (simp->rightTracker.position(deg) - prevRightEnc)/360;
+    deltaL = 8.63938 * (simp->leftTracker.position(deg) - prevLeftEnc)/360;
+    deltaR = 8.63938 * (simp->rightTracker.position(deg) - prevRightEnc)/360;
     deltaS = simp->getWheelCir() * (simp->backTracker.position(deg) - prevBackEnc)/360;
 
     //Update previous value of the encoders
@@ -42,29 +42,29 @@ int odometry::updatePosition(){
     prevRightEnc = simp->rightTracker.position(deg);
     prevBackEnc = simp->backTracker.position(deg);
 
-    float h;
-    float i;
-    float h2;
+    double h;
+    double i;
+    double h2;
 
    
-    float a = (deltaL - deltaR)/(simp->getsL() + simp->getsR());
+    double a = (deltaL - deltaR)/(simp->getsL() + simp->getsR());
 
     if(a){
-      float r = deltaR/a;
+      double r = deltaR/a;
       i = a / 2.0;
-      float sinI = sin(i);
+      double sinI = sin(i);
       h = ((r + simp->getsR()) * sinI) * 2.0;
 
-      float r2 = deltaS/a;
+      double r2 = deltaS/a;
       h2 = ((r2 + simp->getsS()) * sinI) * 2.0;
     } else {
       h = deltaR;
       i = 0;
       h2 = deltaS;
     }
-    float p = i + angleR;
-    float cosP = cos(p);
-    float sinP = sin(p);
+    double p = i + angleR;
+    double cosP = cos(p);
+    double sinP = sin(p);
 
     yPos += h*cosP;
     xPos += h*sinP;

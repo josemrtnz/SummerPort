@@ -19,6 +19,7 @@ class autonomousControl{
     void waitUntilBalls(int ball);
     void waitUntilDistance(float dis);
     void waitUntilSettled();
+    void waitUntilDeg(float deg);
 
     void shootBall(int balls);
     void autoMain();

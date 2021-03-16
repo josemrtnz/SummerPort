@@ -8,6 +8,7 @@ robotChasis::robotChasis( float wD, float tcL, float tcR, float tcB){
   sL = tcL;
   sR = tcR;
   sS = tcB;
+  rollerIntake.setBrake(hold);
   rightTracker.setPosition(0, deg);
   leftTracker.setPosition(0, deg);
   backTracker.setPosition(0, deg);

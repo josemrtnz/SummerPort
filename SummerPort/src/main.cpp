@@ -9,7 +9,7 @@
 #include "vex.h"
 
 using namespace vex;
-robotChasis simp = robotChasis(3.0, 5.5, 5.5, 5);
+robotChasis simp = robotChasis(3.0, 5.75, 5.75, 5.625);
 odometry tracker = odometry(&simp, 0, 0, 0);
 autonomousControl autoChasis = autonomousControl(&simp, &tracker);
 autonomousRoutine autoRoutine = autonomousRoutine(&autoChasis);
@@ -41,6 +41,7 @@ void opControl(){
 
 void autonM(){
   autoRoutine.run();
+  //autoRoutine.test();
 }
 
 void disabledR(){

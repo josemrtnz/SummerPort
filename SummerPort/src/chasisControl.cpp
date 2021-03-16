@@ -40,8 +40,8 @@ float autonomousControl::updatePID(PIDSettings *good){
 
 int autonomousControl::turnCap(float distanceMag){
   if(distanceMag>30.0) return 2000;
-  else if(distanceMag<10.0) return 6000;
-  else return (-100*distanceMag) + 10000;
+  else if(distanceMag>10.0) return 6000;
+  else return 10000;
 }
 
 void autonomousControl::movAB(){
@@ -98,7 +98,7 @@ void autonomousControl::updateFlyTBH(){
 
 void autonomousControl::intakeMove(){
   simp->leftIntake.spin(fwd, intakePct, pct);
-  simp->rightIntake.spin(fwd, intakePct, pct);
+  simp->rightIntake.spin(fwd, -intakePct, pct);
 }
 
 void autonomousControl::flyMove(){
@@ -106,7 +106,9 @@ void autonomousControl::flyMove(){
   simp->flyOuttake.spin(fwd, flyVoltage, voltageUnits::mV);
 }
 
-void autonomousControl::rollerMove(){ simp->rollerIntake.spin(fwd, rollerPct, pct); }
+void autonomousControl::rollerMove(){ 
+  simp->rollerIntake.spin(fwd, rollerPct, pct); 
+  }
 
 void autonomousControl::waitUntilSettled(){
   wait(100, msec);
@@ -116,21 +118,29 @@ void autonomousControl::waitUntilSettled(){
 }
 
 void autonomousControl::waitTilFull(){
-  wait(100, msec);
-  while(simp->shootD.pressing() == false){
+  wait(20, msec);
+  int loopTime = simp->Brain.Timer.time(msec);
+
+  while(simp->shootD.pressing() == false && (2000 > (simp->Brain.Timer.time() - loopTime))){
     wait(20, msec);
   }
-  wait(500, msec);
 }
 
 void autonomousControl::waitUntilDistance(float dis){
-  wait(50, msec);
+  wait(100, msec);
   while(dis < vMag){
     wait(20, msec);
   }
 }
 
 void autonomousControl::waitUntilBalls(int ball){
+}
+
+void autonomousControl::waitUntilDeg(float deg){
+  wait(100, msec);
+  while(deg < fabs(turnPID.curr - turnPID.target) ){
+    wait(20, msec);
+  }
 }
 
 void autonomousControl::updateFly(int rpm){
@@ -165,7 +175,7 @@ void autonomousControl::shootBall(int balls){
 
 void autonomousControl::shootingBall(){
   if (shooting == true){
-    rollerPct = 100;
+    rollerPct = 40;
 
     if ((prevShot == true) && (simp->shootD.pressing() == false)){
       ballsDeteced++;
