@@ -9,9 +9,9 @@ robotChasis::robotChasis( float wD, float tcL, float tcR, float tcB){
   sR = tcR;
   sS = tcB;
   rollerIntake.setBrake(hold);
-  rightTracker.setPosition(0, deg);
-  leftTracker.setPosition(0, deg);
-  backTracker.setPosition(0, deg);
+  rightTracker.resetRotation();
+  leftTracker.resetRotation();
+  backTracker.resetRotation();
 }
 
 void robotChasis::set_drive_break_type(brakeType B){
@@ -37,9 +37,9 @@ float robotChasis::getsS() { return sS; }
 double robotChasis::getWheelCir(){ return PI * wheelDiameter; }
 
 void vexcodeInit(robotChasis *simp) {
-  simp->leftTracker.setPosition(0, deg);
-  simp->rightTracker.setPosition(0, deg);
-  simp->backTracker.setPosition(0, deg);
+  simp->leftTracker.resetRotation();
+  simp->rightTracker.resetRotation();
+  simp->backTracker.resetRotation();
 
   wait(500, msec);
   // Gyro Callibrates

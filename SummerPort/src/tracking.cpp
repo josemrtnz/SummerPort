@@ -33,14 +33,14 @@ int odometry::updatePosition(){
     //The change in encoder values since last cycle in inches
     //deltaL = simp->getWheelCir() * (simp->leftTracker.position(deg) - prevLeftEnc)/360;
     //deltaR = simp->getWheelCir() * (simp->rightTracker.position(deg) - prevRightEnc)/360;
-    deltaL = 8.63938 * (simp->leftTracker.position(deg) - prevLeftEnc)/360;
-    deltaR = 8.63938 * (simp->rightTracker.position(deg) - prevRightEnc)/360;
-    deltaS = simp->getWheelCir() * (simp->backTracker.position(deg) - prevBackEnc)/360;
+    deltaL = 8.63938 * (simp->leftTracker.rotation(deg) - prevLeftEnc)/360;
+    deltaR = 8.63938 * (simp->rightTracker.rotation(deg) - prevRightEnc)/360;
+    deltaS = simp->getWheelCir() * (simp->backTracker.rotation(deg) - prevBackEnc)/360;
 
     //Update previous value of the encoders
-    prevLeftEnc = simp->leftTracker.position(deg);
-    prevRightEnc = simp->rightTracker.position(deg);
-    prevBackEnc = simp->backTracker.position(deg);
+    prevLeftEnc = simp->leftTracker.rotation(deg);
+    prevRightEnc = simp->rightTracker.rotation(deg);
+    prevBackEnc = simp->backTracker.rotation(deg);
 
     double h;
     double i;
@@ -89,18 +89,18 @@ int odometry::updateScreen(){
 
     // Prints the x and y coordinates and angle the bot is facing to the Controller.
     simp->Controller1.Screen.setCursor(0, 0);
-    simp->Controller1.Screen.print("x: %.1fin y: %.1fin     ", xPos, yPos);
-    //simp->Controller1.Screen.print("right: %.1lf     ", simp->rightTracker.position(deg));
-    simp->Controller1.Screen.newLine();
-    simp->Controller1.Screen.print("Angle: %.1f°    ", angleD);
-    //simp->Controller1.Screen.print("left: %.1lf     ", simp->leftTracker.position(deg));
-    //simp->Controller1.Screen.print("back: %.1lf     ", simp->backTracker.position(deg));
+    //simp->Controller1.Screen.print("x: %.1fin y: %.1fin     ", xPos, yPos);
+    simp->Controller1.Screen.print("right: %.1lf     ", simp->rightTracker.rotation(deg));
+    //simp->Controller1.Screen.newLine();
+    //simp->Controller1.Screen.print("Angle: %.1f°    ", angleD);
+    simp->Controller1.Screen.print("left: %.1lf     ", simp->leftTracker.rotation(deg));
+    simp->Controller1.Screen.print("back: %.1lf     ", simp->backTracker.rotation(deg));
     // Controller1.Screen.print("Drive mV: %.0lf");
 
     // Prints information about the bot to the console
     //printf("Distance: %.2lf Y Voltage: %.0f X Voltage: %.0f\n", vMag, yVoltage, xVoltage);
     printf("Tracking Wheels Angle: %0.f   IMU angle: %0.lf\n", angleD, simp->gyroM.rotation());
-    printf("rightTW: %.0lf, leftTW: %.0lf, backTW: %.0lf\n", simp->rightTracker.position(deg), simp->leftTracker.position(deg), simp->backTracker.position(deg));
+    printf("rightTW: %.0lf, leftTW: %.0lf, backTW: %.0lf\n", simp->rightTracker.rotation(deg), simp->leftTracker.rotation(deg), simp->backTracker.rotation(deg));
     printf("Flywheel RPM: %.1lf, Flywheel Voltage: %.0lf\n\n\n", simp->flyOuttake.velocity(rpm), simp->flyOuttake.voltage(voltageUnits::mV));
     //printf("%.0lf, %.0lf, %.0lf \n", Brain.Timer.time(msec), flyOuttake.velocity(rpm), flyOuttake.voltage(voltageUnits::mV));
 
