@@ -14,9 +14,9 @@ public:
   odometry(robotChasis *robot, double x, double y, double deg);
 
 private:
-  double xPos;
-  double yPos;
-  double angleR;
+  long double xPos;
+  long double yPos;
+  long double angleR;
   double angleD;
   robotChasis *simp;
 };

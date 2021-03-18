@@ -43,10 +43,10 @@ void vexcodeInit(robotChasis *simp) {
 
   wait(500, msec);
   // Gyro Callibrates
-  simp->gyroM.calibrate();
+  /*simp->gyroM.calibrate();
   while(simp->gyroM.isCalibrating()){
     wait(50, msec);
-  }
+  }*/
 
   // Prints the values of the tracking wheels in degrees.
   printf("%.0lf, %.0lf, %.0lf \n", simp->leftTracker.position(deg), simp->rightTracker.position(deg), simp->backTracker.position(deg));
