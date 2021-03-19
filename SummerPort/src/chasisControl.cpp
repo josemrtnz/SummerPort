@@ -191,7 +191,30 @@ void autonomousControl::shootingBall(){
 void autonomousControl::odometryMove(bool oMove){ movAB_Enabled = oMove; }
 
 void autonomousControl::moveVision(){
-  
+  updateVisionPos();
+
+  switch(visionStatus){
+    case 1:
+      turnVision();
+      break;
+    case 2:
+      strafeVision();
+      break;
+    case 3:
+      forwardVision();
+      break;
+    default:
+      break;
+  }
+}
+
+void autonomousControl::turnVision(){
+  float angleVoltage = updatePID(&turnPID);
+
+  if(angleVoltage>12000) angleVoltage = 12000;
+  else if(angleVoltage<-12000) angleVoltage = -12000;
+
+  driveM(0, 0, angleVoltage);
 }
 
 void autonomousControl::driveM(double a3, double a4, double a1){
@@ -199,6 +222,23 @@ void autonomousControl::driveM(double a3, double a4, double a1){
   simp->frontLeft.spin(fwd, -a3 - a4 - a1, voltageUnits::mV);
   simp->backRight.spin(fwd, a3 + a4 - a1, voltageUnits::mV);
   simp->backLeft.spin(fwd, -a3 + a4 - a1, voltageUnits::mV);
+}
+
+void autonomousControl::updateVisionPos(){
+  turnPID.curr = simp->gyroM.rotation(deg);
+}
+
+void autonomousControl::visionTowerAlign(int angDeg){
+  odometryMove(false);
+  turnPID.target = angDeg;
+  backEncoder = simp->backTracker.position(deg);
+  rightEncoder = simp->rightTracker.position(deg);
+  leftEncoder = simp->leftTracker.position(deg);
+  wait(50, msec);
+  waitUntilDeg(1);
+  backEncoder = simp->backTracker.position(deg);
+  rightEncoder = simp->rightTracker.position(deg);
+  leftEncoder = simp->leftTracker.position(deg);
 }
 
 void autonomousControl::autoMain(){

@@ -54,6 +54,10 @@ class autonomousControl{
     double flyZero = 0;
     bool shooting = false;
     bool prevShot = 0;
+    double rightEncoder;
+    double leftEncoder;
+    double backEncoder;
+    int visionStatus = 0;
     bool movAB_Enabled = true;
     short ballsDeteced = 0;
     short ballsToShoot = 0;
@@ -65,6 +69,9 @@ class autonomousControl{
 
     void moveDrive(float x, float y, float turn);
     void odometryMove(bool oMove);
+    void turnVision();
+    void forwardVision();
+    void strafeVision();
     float averageRPM();
     float updatePID(PIDSettings *good);
     int turnCap(float distanceMag);
@@ -75,6 +82,7 @@ class autonomousControl{
     void rollerMove();
     void shootingBall();
     void updateCurrPos();
+    void updateVisionPos();
     void moveVision();
     void driveM(double a3, double a4, double a1);
 };
