@@ -24,6 +24,10 @@
 #include "chasisControl.h"
 #include "autonomousRoutine.h"
 
+#define TEST 0
+#define ODOMETRYONLY 1
+#define ODOMVISION 2
+
 #define waitUntil(condition)                                                   \
   do {                                                                         \
     wait(5, msec);                                                             \

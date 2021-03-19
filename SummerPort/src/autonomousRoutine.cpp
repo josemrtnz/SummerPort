@@ -7,7 +7,47 @@ autonomousRoutine::autonomousRoutine(autonomousControl *autoControl) {
                             200, 20, 1200, 2000);
 }
 
-void autonomousRoutine::run() {
+void autonomousRoutine::run(int autoSelection) {
+  switch(autoSelection){
+    case 0:
+      test();
+      break;
+    case 1:
+      odometryOnlyAuto();
+      break;
+    case 2:
+      odometryVisionAuto();
+      break;
+    default:
+      printf("No Auto Selected!");
+      break;
+  }
+}
+
+void autonomousRoutine::test(){
+  control->updateTargetPos(0, 0, 90);
+  control->waitUntilSettled();
+  control->updateTargetPos(0, 0, 0);
+  control->waitUntilSettled();
+  control->updateTargetPos(0, 0, 90);
+  control->waitUntilSettled();
+  control->updateTargetPos(0, 0, 0);
+  control->waitUntilSettled();
+  control->updateTargetPos(0, 0, 90);
+  control->waitUntilSettled();
+  control->updateTargetPos(0, 0, 0);
+  control->waitUntilSettled();
+  control->updateTargetPos(0, 0, 90);
+  control->waitUntilSettled();
+  control->updateTargetPos(0, 0, 0);
+  control->waitUntilSettled();
+  control->updateTargetPos(0, 0, 90);
+  control->waitUntilSettled();
+  control->updateTargetPos(0, 0, 0);
+  control->waitUntilSettled();
+}
+
+void autonomousRoutine::odometryOnlyAuto(){
   control->updateIntakePct(-100);
   wait(1000, msec);
   control->updateTargetPos(0, 9, 0);
@@ -146,26 +186,6 @@ void autonomousRoutine::run() {
   control->shootBall(1);
 }
 
-void autonomousRoutine::test(){
-  control->updateTargetPos(0, 0, 90);
-  control->waitUntilSettled();
-  control->updateTargetPos(0, 0, 0);
-  control->waitUntilSettled();
-  control->updateTargetPos(0, 0, 90);
-  control->waitUntilSettled();
-  control->updateTargetPos(0, 0, 0);
-  control->waitUntilSettled();
-  control->updateTargetPos(0, 0, 90);
-  control->waitUntilSettled();
-  control->updateTargetPos(0, 0, 0);
-  control->waitUntilSettled();
-  control->updateTargetPos(0, 0, 90);
-  control->waitUntilSettled();
-  control->updateTargetPos(0, 0, 0);
-  control->waitUntilSettled();
-  control->updateTargetPos(0, 0, 90);
-  control->waitUntilSettled();
-  control->updateTargetPos(0, 0, 0);
-  control->waitUntilSettled();
+void autonomousRoutine::odometryVisionAuto(){
   
 }

@@ -4,11 +4,12 @@
 
 class autonomousRoutine {
   public:
-    void run();
-    void test();
+    void run(int autoSelection);
     autonomousRoutine(autonomousControl *autoControl);
 
   private:
     autonomousControl *control;
-
+    void odometryOnlyAuto();
+    void test();
+    void odometryVisionAuto();
 };
