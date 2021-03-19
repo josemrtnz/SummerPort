@@ -10,10 +10,6 @@ class autonomousControl{
     void updateIntakePct(int pow);
     void updateFly(int rpm);
     void updateRoller(int pwr);
-    void setPIDConstants(float xkP, float xkI, float xkD, int xCap,
-                         float ykP, float ykI, float ykD, int yCap,
-                         float turnkP, float turnkI, float turnkD, int turnCap);
-    void stopFly();
 
     void waitTilFull();
     void waitUntilBalls(int ball);
@@ -23,6 +19,12 @@ class autonomousControl{
 
     void shootBall(int balls);
     void autoMain();
+    void visionTowerAlign(int angDeg);
+    void stopFly();
+    void setPIDConstants(float xkP, float xkI, float xkD, int xCap,
+                         float ykP, float ykI, float ykD, int yCap,
+                         float turnkP, float turnkI, float turnkD, int turnCap);
+
     autonomousControl(robotChasis *robot, odometry *tr);
 
   private:
@@ -52,6 +54,7 @@ class autonomousControl{
     double flyZero = 0;
     bool shooting = false;
     bool prevShot = 0;
+    bool movAB_Enabled = true;
     short ballsDeteced = 0;
     short ballsToShoot = 0;
     int lowerBound = 0;
@@ -61,6 +64,7 @@ class autonomousControl{
     
 
     void moveDrive(float x, float y, float turn);
+    void odometryMove(bool oMove);
     float averageRPM();
     float updatePID(PIDSettings *good);
     int turnCap(float distanceMag);
@@ -71,4 +75,6 @@ class autonomousControl{
     void rollerMove();
     void shootingBall();
     void updateCurrPos();
+    void moveVision();
+    void driveM(double a3, double a4, double a1);
 };

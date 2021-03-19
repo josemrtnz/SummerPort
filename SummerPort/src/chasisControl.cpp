@@ -188,11 +188,25 @@ void autonomousControl::shootingBall(){
   }
 }
 
+void autonomousControl::odometryMove(bool oMove){ movAB_Enabled = oMove; }
+
+void autonomousControl::moveVision(){
+  
+}
+
+void autonomousControl::driveM(double a3, double a4, double a1){
+  simp->frontRight.spin(fwd, a3 - a4 - a1, voltageUnits::mV);
+  simp->frontLeft.spin(fwd, -a3 - a4 - a1, voltageUnits::mV);
+  simp->backRight.spin(fwd, a3 + a4 - a1, voltageUnits::mV);
+  simp->backLeft.spin(fwd, -a3 + a4 - a1, voltageUnits::mV);
+}
+
 void autonomousControl::autoMain(){
   simp->set_drive_break_type(coast);
 
   while(true){
-    movAB();
+    if(movAB_Enabled) movAB();
+    else moveVision();
     shootingBall();
     intakeMove();
     rollerMove();
