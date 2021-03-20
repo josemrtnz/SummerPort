@@ -217,6 +217,24 @@ void autonomousControl::turnVision(){
   driveM(0, 0, angleVoltage);
 }
 
+void autonomousControl::forwardVision(){
+  float forwardVoltage = updatePID(&yPID);
+  float strafeVoltage = 200 * (simp->backTracker.rotation(deg) - backEncoder);
+  float turnVoltage = 2000*(turnPID.target - simp->gyroM.rotation(deg));
+  vMag = fabs(yPID.target - yPID.curr);
+
+   if(turnVoltage>10000) turnVoltage = 10000;
+  else if(turnVoltage<-10000) turnVoltage = -10000;
+
+  if(strafeVoltage>10000) strafeVoltage = 10000;
+  else if(strafeVoltage<-10000) strafeVoltage = -10000;
+
+  if(forwardVoltage>10000) forwardVoltage = 10000;
+  else if(forwardVoltage<-10000) forwardVoltage = -10000;
+
+  driveM(forwardVoltage, strafeVoltage, turnVoltage);
+}
+
 void autonomousControl::driveM(double a3, double a4, double a1){
   simp->frontRight.spin(fwd, a3 - a4 - a1, voltageUnits::mV);
   simp->frontLeft.spin(fwd, -a3 - a4 - a1, voltageUnits::mV);
@@ -226,19 +244,27 @@ void autonomousControl::driveM(double a3, double a4, double a1){
 
 void autonomousControl::updateVisionPos(){
   turnPID.curr = simp->gyroM.rotation(deg);
+  yPID.curr = simp->getWheelCir() * (simp->rightTracker - rightEncoder)/360;
+  xPID.curr = simp->getWheelCir() * (simp->backTracker - backEncoder)/360;
 }
 
 void autonomousControl::visionTowerAlign(int angDeg){
   odometryMove(false);
   turnPID.target = angDeg;
-  backEncoder = simp->backTracker.position(deg);
-  rightEncoder = simp->rightTracker.position(deg);
-  leftEncoder = simp->leftTracker.position(deg);
   wait(50, msec);
+  visionStatus = 2;
   waitUntilDeg(1);
   backEncoder = simp->backTracker.position(deg);
   rightEncoder = simp->rightTracker.position(deg);
   leftEncoder = simp->leftTracker.position(deg);
+  visionStatus = 2;
+  waitUntilDistance(1);
+  backEncoder = simp->backTracker.position(deg);
+  rightEncoder = simp->rightTracker.position(deg);
+  leftEncoder = simp->leftTracker.position(deg);
+  visionStatus = 3;
+  waitUntilDistance(1);
+  odometryMove(true);
 }
 
 void autonomousControl::autoMain(){
