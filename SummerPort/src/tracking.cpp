@@ -16,9 +16,9 @@ double odometry::getYPos(){ return yPos; }
 
 int odometry::updatePosition(){
   double loopTime;
-  long double deltaL;
-  long double deltaR;
-  long double deltaS;
+  double deltaL;
+  double deltaR;
+  double deltaS;
   double prevLeftEnc = 0;
   double prevRightEnc = 0;
   double prevBackEnc = 0;
@@ -31,39 +31,39 @@ int odometry::updatePosition(){
     loopTime = simp->Brain.Timer.time(msec);
 
     //The change in encoder values since last cycle in inches
-    deltaL = simp->getWheelCir() * (simp->leftTracker.position(deg) - prevLeftEnc)/360;
-    deltaR = simp->getWheelCir() * (simp->rightTracker.position(deg) - prevRightEnc)/360;
-    deltaS = simp->getWheelCir() * (simp->backTracker.position(deg) - prevBackEnc)/360;
+    deltaL = simp->getWheelCir() * (simp->leftTracker.rotation(deg) - prevLeftEnc)/360;
+    deltaR = simp->getWheelCir() * (simp->rightTracker.rotation(deg) - prevRightEnc)/360;
+    deltaS = simp->getWheelCir() * (simp->backTracker.rotation(deg) - prevBackEnc)/360;
 
     //Update previous value of the encoders
     prevLeftEnc = simp->leftTracker.rotation(deg);
     prevRightEnc = simp->rightTracker.rotation(deg);
     prevBackEnc = simp->backTracker.rotation(deg);
 
-    long double h;
-    long double i;
-    long double h2;
+    double h;
+    double i;
+    double h2;
 
    
-    long double a = (deltaL - deltaR)/(simp->getsL() + simp->getsR());
+    double a = (deltaL - deltaR)/(simp->getsL() + simp->getsR());
     //double a = (angleD - simp->gyroM.rotation(deg)) * (simp->getPI()/180);
 
     if(a){
-      long double r = deltaR/a;
+      double r = deltaR/a;
       i = a / 2.0;
-      long double sinI = sin(i);
+      double sinI = sin(i);
       h = ((r + simp->getsR()) * sinI) * 2.0;
 
-      long double r2 = deltaS/a;
+      double r2 = deltaS/a;
       h2 = ((r2 + simp->getsS()) * sinI) * 2.0;
     } else {
       h = deltaR;
       i = 0;
       h2 = deltaS;
     }
-    long double p = i + angleR;
-    long double cosP = cos(p);
-    long double sinP = sin(p);
+    double p = i + angleR;
+    double cosP = cos(p);
+    double sinP = sin(p);
 
     yPos += h*cosP;
     xPos += h*sinP;
@@ -73,7 +73,7 @@ int odometry::updatePosition(){
     angleR += a;
     angleD = angleR * (180/simp->getPI());
     //Delays task so it does not hog all resources
-    task::sleep(5 - (simp->Brain.Timer.time(msec)-loopTime));
+    task::sleep(10 - (simp->Brain.Timer.time(msec)-loopTime));
   }
   return 1;
 }
@@ -88,13 +88,13 @@ int odometry::updateScreen(){
 
     // Prints the x and y coordinates and angle the bot is facing to the Controller.
     simp->Controller1.Screen.setCursor(0, 0);
-    simp->Controller1.Screen.print("x: %.1fin y: %.1fin     ", xPos, yPos);
-    //simp->Controller1.Screen.print("right: %.1lf     ", simp->rightTracker.rotation(deg));
+    //simp->Controller1.Screen.print("x: %.1fin y: %.1fin     ", xPos, yPos);
+    simp->Controller1.Screen.print("right: %.1lf     ", simp->rightTracker.rotation(deg));
     simp->Controller1.Screen.newLine();
-    simp->Controller1.Screen.print("Angle: %.1f°    ", angleD);
-    //simp->Controller1.Screen.print("left: %.1lf     ", simp->leftTracker.rotation(deg));
-    //simp->Controller1.Screen.newLine();
-    //simp->Controller1.Screen.print("back: %.1lf     ", simp->backTracker.rotation(deg));
+    //simp->Controller1.Screen.print("Angle: %.1f°    ", angleD);
+    simp->Controller1.Screen.print("left: %.1lf     ", simp->leftTracker.rotation(deg));
+    simp->Controller1.Screen.newLine();
+    simp->Controller1.Screen.print("back: %.1lf     ", simp->backTracker.rotation(deg));
     // Controller1.Screen.print("Drive mV: %.0lf");
 
     // Prints information about the bot to the console

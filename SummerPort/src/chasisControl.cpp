@@ -124,6 +124,7 @@ void autonomousControl::waitTilFull(){
   while(simp->shootD.pressing() == false && (2000 > (simp->Brain.Timer.time() - loopTime))){
     wait(20, msec);
   }
+  shooting = false;
 }
 
 void autonomousControl::waitUntilDistance(float dis){
@@ -216,6 +217,8 @@ void autonomousControl::turnVision(){
 
   driveM(0, 0, angleVoltage);
 }
+
+void autonomousControl::strafeVision(){}
 
 void autonomousControl::forwardVision(){
   float forwardVoltage = updatePID(&yPID);

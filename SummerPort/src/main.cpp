@@ -41,7 +41,7 @@ void opControl(){
 
 void autonM(){
   simp.gyroM.resetRotation();
-  autoRoutine.run(TEST);
+  autoRoutine.run(ODOMETRYONLY);
 }
 
 void disabledR(){
