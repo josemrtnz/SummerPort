@@ -88,13 +88,13 @@ int odometry::updateScreen(){
 
     // Prints the x and y coordinates and angle the bot is facing to the Controller.
     simp->Controller1.Screen.setCursor(0, 0);
-    //simp->Controller1.Screen.print("x: %.1fin y: %.1fin     ", xPos, yPos);
-    simp->Controller1.Screen.print("right: %.1lf     ", simp->rightTracker.rotation(deg));
+    simp->Controller1.Screen.print("x: %.1fin y: %.1fin     ", xPos, yPos);
+    //simp->Controller1.Screen.print("right: %.1lf     ", simp->rightTracker.rotation(deg));
     simp->Controller1.Screen.newLine();
-    //simp->Controller1.Screen.print("Angle: %.1f°    ", angleD);
-    simp->Controller1.Screen.print("left: %.1lf     ", simp->leftTracker.rotation(deg));
+    simp->Controller1.Screen.print("Angle: %.1f°    ", angleD);
+    //simp->Controller1.Screen.print("left: %.1lf     ", simp->leftTracker.rotation(deg));
     simp->Controller1.Screen.newLine();
-    simp->Controller1.Screen.print("back: %.1lf     ", simp->backTracker.rotation(deg));
+    //simp->Controller1.Screen.print("back: %.1lf     ", simp->backTracker.rotation(deg));
     // Controller1.Screen.print("Drive mV: %.0lf");
 
     // Prints information about the bot to the console
