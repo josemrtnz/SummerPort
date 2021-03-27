@@ -107,7 +107,7 @@ class robotChasis{
 
     float wheelDiameter;
     double wheelCir;
-    const double PI = 3.14159265359;
+    const double PI = 22/7;
 
     float sL;
     float sR;

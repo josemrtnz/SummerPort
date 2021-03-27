@@ -22,6 +22,9 @@ int odometry::updatePosition(){
   double prevLeftEnc = 0;
   double prevRightEnc = 0;
   double prevBackEnc = 0;
+  double currLeftEnc = 0;
+  double currRightEnc = 0;
+  double currBackEnc = 0;
   
 
   // This loop will update the x and y position and angle the bot is facing
@@ -30,15 +33,19 @@ int odometry::updatePosition(){
     //Current time at start of loop
     loopTime = simp->Brain.Timer.time(msec);
 
+    currLeftEnc = simp->leftTracker.rotation(deg);
+    currRightEnc = simp->rightTracker.rotation(deg);
+    currBackEnc = simp->backTracker.rotation(deg);
+
     //The change in encoder values since last cycle in inches
-    deltaL = simp->getWheelCir() * (simp->leftTracker.rotation(deg) - prevLeftEnc)/360;
-    deltaR = simp->getWheelCir() * (simp->rightTracker.rotation(deg) - prevRightEnc)/360;
-    deltaS = simp->getWheelCir() * (simp->backTracker.rotation(deg) - prevBackEnc)/360;
+    deltaL = (currLeftEnc - prevLeftEnc) * simp->getWheelCir()/360;
+    deltaR = (currRightEnc - prevRightEnc)* simp->getWheelCir()/360;
+    deltaS = (currBackEnc - prevBackEnc)* simp->getWheelCir()/360;
 
     //Update previous value of the encoders
-    prevLeftEnc = simp->leftTracker.rotation(deg);
-    prevRightEnc = simp->rightTracker.rotation(deg);
-    prevBackEnc = simp->backTracker.rotation(deg);
+    prevLeftEnc = currLeftEnc;
+    prevRightEnc = currRightEnc;
+    prevBackEnc = currBackEnc;
 
     double h;
     double i;
@@ -73,7 +80,7 @@ int odometry::updatePosition(){
     angleR += a;
     angleD = angleR * (180/simp->getPI());
     //Delays task so it does not hog all resources
-    task::sleep(10 - (simp->Brain.Timer.time(msec)-loopTime));
+    task::sleep(8 - (simp->Brain.Timer.time(msec)-loopTime));
   }
   return 1;
 }
