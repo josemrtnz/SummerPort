@@ -52,10 +52,10 @@ int odometry::updatePosition(){
       double r = deltaR/a;
       i = a / 2.0;
       double sinI = sin(i);
-      h = ((r + simp->getsR()) * sinI) * 2.0;
+      h = (r + simp->getsR()) * sinI * 2.0;
 
       double r2 = deltaS/a;
-      h2 = ((r2 + simp->getsS()) * sinI) * 2.0;
+      h2 = (r2 + simp->getsS()) * sinI * 2.0;
     } else {
       h = deltaR;
       i = 0;
