@@ -59,8 +59,8 @@ class robotChasis{
 
     controller Controller1;
 
-    motor frontRight = motor(PORT9, ratio18_1, false);
-    motor frontLeft = motor(PORT8, ratio18_1, false);
+    motor frontRight = motor(PORT9, ratio18_1, true);
+    motor frontLeft = motor(PORT8, ratio18_1, true);
     motor backLeft = motor(PORT18, ratio18_1, false);
     motor backRight = motor(PORT10, ratio18_1, false);
 
@@ -69,12 +69,12 @@ class robotChasis{
     motor flyOuttake = motor(PORT14, ratio6_1, true);
     motor rollerIntake = motor(PORT11, ratio6_1, true);
 
-    encoder leftTracker = encoder(Brain.ThreeWirePort.E);
-    encoder rightTracker = encoder(Brain.ThreeWirePort.A);
-    encoder backTracker = encoder(Brain.ThreeWirePort.C);
-    //rotation leftTracker = rotation(PORT1, false);
-    //rotation rightTracker = rotation(PORT4, false);
-    //rotation backTracker = rotation(PORT3, false);
+    //encoder leftTracker = encoder(Brain.ThreeWirePort.E);
+    //encoder rightTracker = encoder(Brain.ThreeWirePort.A);
+    //encoder backTracker = encoder(Brain.ThreeWirePort.C);
+    rotation leftTracker = rotation(PORT17, false);
+    rotation rightTracker = rotation(PORT5, true);
+    rotation backTracker = rotation(PORT4, false);
     
     limit shootD = limit(Brain.ThreeWirePort.H);
 

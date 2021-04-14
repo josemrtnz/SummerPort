@@ -33,9 +33,9 @@ int odometry::updatePosition(){
     //Current time at start of loop
     loopTime = simp->Brain.Timer.time(msec);
 
-    currLeftEnc = simp->leftTracker.rotation(deg);
-    currRightEnc = simp->rightTracker.rotation(deg);
-    currBackEnc = simp->backTracker.rotation(deg);
+    currLeftEnc = simp->leftTracker.position(deg);
+    currRightEnc = simp->rightTracker.position(deg);
+    currBackEnc = simp->backTracker.position(deg);
 
     //The change in encoder values since last cycle in inches
     deltaL = (currLeftEnc - prevLeftEnc) * simp->getWheelCir()/360;
@@ -107,7 +107,7 @@ int odometry::updateScreen(){
     // Prints information about the bot to the console
     //printf("Distance: %.2lf Y Voltage: %.0f X Voltage: %.0f\n", vMag, yVoltage, xVoltage);
     printf("Tracking Wheels Angle: %0.f   IMU angle: %0.lf\n", angleD, simp->gyroM.rotation(deg));
-    printf("rightTW: %.0lf, leftTW: %0.lf, backTW: %.0lf\n", simp->rightTracker.rotation(deg), simp->leftTracker.rotation(deg), simp->backTracker.rotation(deg));
+    printf("rightTW: %.0lf, leftTW: %0.lf, backTW: %.0lf\n", simp->rightTracker.position(deg), simp->leftTracker.position(deg), simp->backTracker.position(deg));
     printf("Flywheel RPM: %.1lf, Flywheel Voltage: %.0lf\n\n\n", simp->flyOuttake.velocity(rpm), simp->flyOuttake.voltage(voltageUnits::mV));
     //printf("%.0lf, %.0lf, %.0lf \n", Brain.Timer.time(msec), flyOuttake.velocity(rpm), flyOuttake.voltage(voltageUnits::mV));
 
