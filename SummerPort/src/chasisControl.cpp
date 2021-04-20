@@ -222,7 +222,7 @@ void autonomousControl::strafeVision(){}
 
 void autonomousControl::forwardVision(){
   float forwardVoltage = updatePID(&yPID);
-  float strafeVoltage = 200 * (simp->backTracker.rotation(deg) - backEncoder);
+  float strafeVoltage = 200 * (simp->backTracker.position(deg) - backEncoder);
   float turnVoltage = 2000*(turnPID.target - simp->gyroM.rotation(deg));
   vMag = fabs(yPID.target - yPID.curr);
 
@@ -247,8 +247,8 @@ void autonomousControl::driveM(double a3, double a4, double a1){
 
 void autonomousControl::updateVisionPos(){
   turnPID.curr = simp->gyroM.rotation(deg);
-  yPID.curr = simp->getWheelCir() * (simp->rightTracker - rightEncoder)/360;
-  xPID.curr = simp->getWheelCir() * (simp->backTracker - backEncoder)/360;
+  yPID.curr = simp->getWheelCir() * (simp->rightTracker.position(deg) - rightEncoder)/360;
+  xPID.curr = simp->getWheelCir() * (simp->backTracker.position(deg) - backEncoder)/360;
 }
 
 void autonomousControl::visionTowerAlign(int angDeg){

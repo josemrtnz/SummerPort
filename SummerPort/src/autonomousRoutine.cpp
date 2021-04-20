@@ -27,8 +27,8 @@ void autonomousRoutine::run(int autoSelection) {
 void autonomousRoutine::test(){
   control->updateTargetPos(0, 0, 180);
   control->waitUntilSettled();
-  //control->updateTargetPos(0, 0, 0);
-  //control->waitUntilSettled();
+  control->updateTargetPos(0, 0, 0);
+  control->waitUntilSettled();
 }
 
 void autonomousRoutine::odometryOnlyAuto(){
@@ -58,16 +58,16 @@ void autonomousRoutine::odometryOnlyAuto(){
   control->waitUntilDistance(2);
   control->updateTargetPos(11, 7, 0);
   control->waitUntilDeg(2);
-  control->updateTargetPos(11, 62, 0);
+  control->updateTargetPos(11, 61, 0);
   control->waitUntilDistance(30);
   control->updateIntakePct(-100);
   control->updateRoller(30);
   control->waitTilFull();
   control->updateRoller(0);
   control->waitUntilDistance(2);
-  control->updateTargetPos(10, 62, 90);
+  control->updateTargetPos(10, 61, 90);
   control->waitUntilDeg(1);
-  control->updateTargetPos(14, 62, 90);
+  control->updateTargetPos(14, 61, 90);
   control->waitUntilDistance(1);
   control->updateIntakePct(0);
   control->shootBall(1);
@@ -83,12 +83,12 @@ void autonomousRoutine::odometryOnlyAuto(){
   control->waitTilFull();
   control->updateRoller(0);
   control->waitUntilDeg(5);
-  control->updateTargetPos(18, 103, 90);
+  control->updateTargetPos(16, 103, 90);
   control->waitUntilDistance(2);
   control->updateTargetPos(10, 99, 45);
   control->waitUntilDeg(2);
   control->updateIntakePct(0);
-  control->updateTargetPos(14, 116, 45);
+  control->updateTargetPos(12, 116, 45);
   control->waitUntilDistance(1);
   control->shootBall(1);
   wait(1250, msec);

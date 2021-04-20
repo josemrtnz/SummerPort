@@ -9,7 +9,7 @@
 #include "vex.h"
 
 using namespace vex;
-robotChasis simp = robotChasis(2.75, 5.8, 5.8, 5.5);
+robotChasis simp = robotChasis(2.75, 5.65, 5.65, 5.25);
 odometry tracker = odometry(&simp, 0, 0, 0);
 autonomousControl autoChasis = autonomousControl(&simp, &tracker);
 autonomousRoutine autoRoutine = autonomousRoutine(&autoChasis);
