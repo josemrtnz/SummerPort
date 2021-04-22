@@ -1,6 +1,6 @@
-# Summer Port (X-Drive)
+# Summer Port (Holonomic-Drive)
 
->This code is intended to be for testing out abosolute positioning and x-drive.
+>This code is intended to be for testing out abosolute positioning and a holonmic-drive.
 
 ## Goals
 
