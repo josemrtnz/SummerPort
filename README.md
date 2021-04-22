@@ -25,11 +25,9 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **Jose Martinez** - *Programming Lead* - [josemrtnz](https://github.com/josemrtnz)
+* **Jose Martinez** - *Programming Lead* - [josemrtnz](https://github.com/josemrtnz) <<<<<<< HEAD
 * **Sergio Hernandez** - *Programmer* - [Sergio1452](https://github.com/Sergio1452)
-<<<<<<< HEAD
 * **Daniel Castellon** - *Programmer/CameraMan* [Turtlewax32](https://github.com/Turtlewax32)
-=======
 * **Daniel Castellon** - *Programmer/CameraMan* [Turtlewax32](https://github.com/mgomez1910)
 * **Matthew Gomez** - *Programmer* [mgomez1910](https://github.com/Turtlewax32)
 >>>>>>> GUCCI
