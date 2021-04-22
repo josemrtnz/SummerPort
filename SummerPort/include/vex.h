@@ -7,6 +7,8 @@
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 //
+#pragma once 
+
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,6 +22,11 @@
 #include "tracking.h"
 #include "usercontrol.h"
 #include "chasisControl.h"
+#include "autonomousRoutine.h"
+
+#define TEST 0
+#define ODOMETRYONLY 1
+#define ODOMVISION 2
 
 #define waitUntil(condition)                                                   \
   do {                                                                         \
