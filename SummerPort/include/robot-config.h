@@ -6,8 +6,8 @@ using namespace vex;
 /// Class for robot configuration.
 ///
 /// A class for storing motor, sensor, brain, controller objects.
-/// This class also holds most constants used throught the program.
-/// Classes like \ref odometry, autonomousControl, and userControl will use
+/// This class also holds most constants used throughout the program.
+/// Classes \ref odometry, autonomousControl, and userControl will use
 /// this class to access sensor data and motors.
 class robotChasis{
   public:
@@ -53,32 +53,56 @@ class robotChasis{
     /// @return value wheelCir as a double
     double getWheelCir();
     
+    /// V5 Brain Instance 
     brain Brain;
 
+    /// Competition Instance
     competition Comp;
 
+    /// Controller Instance
     controller Controller1;
 
-    motor frontRight = motor(PORT9, ratio18_1, true);
-    motor frontLeft = motor(PORT8, ratio18_1, true);
-    motor backLeft = motor(PORT18, ratio18_1, false);
-    motor backRight = motor(PORT10, ratio18_1, false);
+    /// Front Right Motor Instance
+    motor frontRight = motor(PORT12, ratio36_1, true);
 
-    motor leftIntake = motor(PORT15, ratio6_1, true);
-    motor rightIntake = motor(PORT7, ratio6_1, true);
-    motor flyOuttake = motor(PORT14, ratio6_1, true);
-    motor rollerIntake = motor(PORT11, ratio6_1, true);
+    /// Front Left Motor Instance
+    motor frontLeft = motor(PORT2, ratio36_1, true);
+
+    /// Back Left Motor Instance
+    motor backLeft = motor(PORT1, ratio36_1, true);
+
+    /// Back Right Motor Instance
+    motor backRight = motor(PORT11, ratio36_1, true);
+
+    /// Left Intake Motor Instance
+    motor leftIntake = motor(PORT4, ratio36_1, true);
+
+    /// Right Intake Motor Instance
+    motor rightIntake = motor(PORT4, ratio36_1, true);
+
+    /// Fly Wheel Motor Instance
+    motor flyOuttake = motor(PORT4, ratio36_1, true);
+
+    /// Roller Motor Instance
+    motor rollerIntake = motor(PORT4, ratio36_1, true);
 
     //encoder leftTracker = encoder(Brain.ThreeWirePort.E);
     //encoder rightTracker = encoder(Brain.ThreeWirePort.A);
     //encoder backTracker = encoder(Brain.ThreeWirePort.C);
-    rotation leftTracker = rotation(PORT17, false);
-    rotation rightTracker = rotation(PORT5, true);
+    /// Left Tracker Rotation Sensor Instance
+    rotation leftTracker = rotation(PORT4, false);
+
+    /// Right Tracker Rotation Sensor Instance
+    rotation rightTracker = rotation(PORT4, true);
+
+    /// Back Tracker Rotation Sensor Instance
     rotation backTracker = rotation(PORT4, false);
     
+    /// Limit Switch Sensor Instance
     limit shootD = limit(Brain.ThreeWirePort.H);
 
-    inertial gyroM = inertial(PORT12);
+    /// IMU Sensor Instance
+    inertial gyroM = inertial(PORT4);
 
     /// Sets the brake type for the drive motors.
     ///
@@ -93,9 +117,9 @@ class robotChasis{
     /// \see <a href="https://api.vexcode.cloud/v5/html/namespacevex.html#a2090f7d57d63c5cf693f269bc73568f1">vex::brakeType</a>
     void stopMotors();
 
-    /// Constructor for the class robotChasis.
+    /// Constructor for the class \ref robotChasis.
     ///
-    /// This constructor will create an instance of the class robotChasis.
+    /// This constructor will create an instance of the class \ref robotChasis.
     /// It will set values to wheelDiameter, sL, sR, and sS.
     /// @param wD Wheel diameter in inches.
     /// @param tcL Left Tracking Wheel distance to tracking center. 

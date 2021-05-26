@@ -274,8 +274,7 @@ void autonomousControl::autoMain(){
   simp->set_drive_break_type(coast);
 
   while(true){
-    if(movAB_Enabled) movAB();
-    else moveVision();
+    movAB();
     shootingBall();
     intakeMove();
     rollerMove();

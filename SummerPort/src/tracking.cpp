@@ -6,7 +6,7 @@ odometry::odometry(robotChasis *robot, double x, double y, double deg){
   xPos = x;
   yPos = y;
   angleD = deg;
-  angleR = 0;
+  angleR = (deg*robot->getPI())/180;
 }
 
 double odometry::getangleD(){ return angleD; }
