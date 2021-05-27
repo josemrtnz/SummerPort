@@ -1,5 +1,6 @@
 #include "usercontrol.h"
-
+#define TURN_SENSITIVITY .6
+#define MOVE_SENSITIVITY .8
 userControl::userControl(robotChasis *robot, bool dM){
   simp = robot;
   driverMode = dM;
@@ -13,7 +14,7 @@ void userControl::flyWheelToggle(){
   if ((flySpeedToggle == false) && simp->Controller1.ButtonY.pressing()) flyFast = !flyFast;
   flySpeedToggle = simp->Controller1.ButtonY.pressing();
 
-  flyWheelPow = flyFast ? 100 : 80;
+  flyWheelPow = flyFast ? 70 : 70;
 
   if(flyWheelOn) simp->flyOuttake.spin(fwd, flyWheelPow, pct);
   else simp->flyOuttake.spin(fwd, 0, pct);
@@ -62,10 +63,10 @@ void userControl::driveM(){
   a1 = simp->Controller1.Axis1.position(pct) * 120;
 
   if((std::abs(a3) > 960) || (std::abs(a4) > 960) || (std::abs(a1) > 960)){
-    simp->frontRight.spin(fwd, a3 - a4 - a1, voltageUnits::mV);
-    simp->frontLeft.spin(fwd, -a3 - a4 - a1, voltageUnits::mV);
-    simp->backRight.spin(fwd, a3 + a4 - a1, voltageUnits::mV);
-    simp->backLeft.spin(fwd, -a3 + a4 - a1, voltageUnits::mV);
+    simp->frontRight.spin(fwd, (a3 * MOVE_SENSITIVITY) - (a4 * MOVE_SENSITIVITY) - (a1 * TURN_SENSITIVITY), voltageUnits::mV);
+    simp->frontLeft.spin(fwd, -(a3 * MOVE_SENSITIVITY) - (a4 * MOVE_SENSITIVITY) - (a1 * TURN_SENSITIVITY), voltageUnits::mV);
+    simp->backRight.spin(fwd, (a3 * MOVE_SENSITIVITY) + (a4 * MOVE_SENSITIVITY) - (a1 * TURN_SENSITIVITY), voltageUnits::mV);
+    simp->backLeft.spin(fwd, -(a3 * MOVE_SENSITIVITY) + (a4 * MOVE_SENSITIVITY) - (a1 * TURN_SENSITIVITY), voltageUnits::mV);
   } else {
     simp->frontRight.spin(fwd, 0, voltageUnits::mV);
     simp->frontLeft.spin(fwd, 0, voltageUnits::mV);
@@ -81,10 +82,10 @@ void userControl::driveMA(){
 
   double currAngle = ((simp->getPI()/180)*simp->gyroM.heading());
   
-  simp->frontLeft.spin(fwd, (a4*cos(simp->get_flbr()-currAngle) + a3*sin(simp->get_flbr()-currAngle)) - a1, voltageUnits::mV);
-  simp->frontRight.spin(fwd, -(a4*cos(simp->get_frbl()-currAngle) + a3*sin(simp->get_frbl()-currAngle)) - a1, voltageUnits::mV);
-  simp->backLeft.spin(fwd, (a4*cos(simp->get_frbl()-currAngle) + a3*sin(simp->get_frbl()-currAngle)) - a1, voltageUnits::mV);
-  simp->backRight.spin(fwd, -(a4*cos(simp->get_flbr()-currAngle) + a3*sin(simp->get_flbr()-currAngle)) - a1, voltageUnits::mV);
+  simp->frontLeft.spin(fwd, (a4*cos(simp->get_flbr()-currAngle) + a3*sin(simp->get_flbr()-currAngle)) - (a1 * TURN_SENSITIVITY), voltageUnits::mV);
+  simp->frontRight.spin(fwd, -(a4*cos(simp->get_frbl()-currAngle) + a3*sin(simp->get_frbl()-currAngle)) - (a1 * TURN_SENSITIVITY), voltageUnits::mV);
+  simp->backLeft.spin(fwd, (a4*cos(simp->get_frbl()-currAngle) + a3*sin(simp->get_frbl()-currAngle)) - (a1 * TURN_SENSITIVITY), voltageUnits::mV);
+  simp->backRight.spin(fwd, -(a4*cos(simp->get_flbr()-currAngle) + a3*sin(simp->get_flbr()-currAngle)) - (a1 * TURN_SENSITIVITY), voltageUnits::mV);
 }
 
 void userControl::setDriveMode(){

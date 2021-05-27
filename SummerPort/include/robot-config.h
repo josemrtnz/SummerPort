@@ -63,37 +63,37 @@ class robotChasis{
     controller Controller1;
 
     /// Front Right Motor Instance
-    motor frontRight = motor(PORT12, ratio36_1, true);
+    motor frontRight = motor(PORT9, ratio18_1, true);
 
     /// Front Left Motor Instance
-    motor frontLeft = motor(PORT2, ratio36_1, true);
+    motor frontLeft = motor(PORT8, ratio18_1, true);
 
     /// Back Left Motor Instance
-    motor backLeft = motor(PORT1, ratio36_1, true);
+    motor backLeft = motor(PORT18, ratio18_1, false);
 
     /// Back Right Motor Instance
-    motor backRight = motor(PORT11, ratio36_1, true);
+    motor backRight = motor(PORT10, ratio18_1, false);
 
     /// Left Intake Motor Instance
-    motor leftIntake = motor(PORT4, ratio36_1, true);
+    motor leftIntake = motor(PORT15, ratio36_1, true);
 
     /// Right Intake Motor Instance
-    motor rightIntake = motor(PORT4, ratio36_1, true);
+    motor rightIntake = motor(PORT21, ratio36_1, true);
 
     /// Fly Wheel Motor Instance
-    motor flyOuttake = motor(PORT4, ratio36_1, true);
+    motor flyOuttake = motor(PORT14, ratio36_1, true);
 
     /// Roller Motor Instance
-    motor rollerIntake = motor(PORT4, ratio36_1, true);
+    motor rollerIntake = motor(PORT11, ratio36_1, true);
 
     //encoder leftTracker = encoder(Brain.ThreeWirePort.E);
     //encoder rightTracker = encoder(Brain.ThreeWirePort.A);
     //encoder backTracker = encoder(Brain.ThreeWirePort.C);
     /// Left Tracker Rotation Sensor Instance
-    rotation leftTracker = rotation(PORT4, false);
+    rotation leftTracker = rotation(PORT17, false);
 
     /// Right Tracker Rotation Sensor Instance
-    rotation rightTracker = rotation(PORT4, true);
+    rotation rightTracker = rotation(PORT5, true);
 
     /// Back Tracker Rotation Sensor Instance
     rotation backTracker = rotation(PORT4, false);
@@ -102,7 +102,7 @@ class robotChasis{
     limit shootD = limit(Brain.ThreeWirePort.H);
 
     /// IMU Sensor Instance
-    inertial gyroM = inertial(PORT4);
+    inertial gyroM = inertial(PORT12);
 
     /// Sets the brake type for the drive motors.
     ///
