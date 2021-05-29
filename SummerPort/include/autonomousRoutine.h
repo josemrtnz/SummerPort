@@ -19,7 +19,7 @@ class autonomousRoutine {
     ///
     /// This constructor will create an instance of the class \ref autonomousRoutine.
     /// It will save the pointer to an \ref automousControl object for creation of autonmous routines.
-    /// @param autoControl Pointer of an autonomousControl object.
+    /// @param *autoControl Pointer of an \ref autonomousControl object.
     autonomousRoutine(autonomousControl *autoControl);
 
   private:

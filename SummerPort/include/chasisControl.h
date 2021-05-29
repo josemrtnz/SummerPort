@@ -55,18 +55,66 @@ class autonomousControl{
     /// @param dis Distance to the target in inches.
     void waitUntilDistance(float dis);
 
-    
+    /// Waits until the robot stops moving.
+    ///
+    /// Waits until the rpm of the drive motors falls below 2.
     void waitUntilSettled();
+
+    /// Waits until the robot's orientation is within the target.
+    ///
+    /// Waits until the robot's orrientation is within the specified angular distance of the target orientation.
+    /// @param deg Degrees to wait until it reaches the target.
     void waitUntilDeg(float deg);
 
+    /// Shoots specified amount of balls.
+    ///
+    /// Will spin the flywheel and midrollers until the specified amount of balls are shot.
+    /// @param balls Number of balls to shoot.
     void shootBall(int balls);
+
+    /// Main loop for the autonomous period.
+    ///
+    /// This function has a while loop that will always be running during the autonmous period.
+    /// The while loop will call functions to move the drive to the target position and any other motors will be set to their target. 
     void autoMain();
+
+    /// N/A
+    /// 
+    /// N/A
     void visionTowerAlign(int angDeg);
+
+    /// Stops Flywheel
+    ///
+    /// This function will stop the flywheel.
     void stopFly();
+
+    /// Sets PID constants for the robot in autonomous control.
+    ///
+    /// This function will set the PID settings for the x, y, and turning.
+    /// @param xkP x kP Constant
+    /// @param xkI x kI Constant
+    /// @param xkD x kD Constant
+    /// @param xCap x cap setting for the total error
+    /// @param ykP y kP Constant
+    /// @param ykI y kI Constant
+    /// @param ykD y kD Constant
+    /// @param yCap y cap setting for the total error
+    /// @param turnkP turn kP Constant
+    /// @param turnkI turn kI Constant
+    /// @param turnkD turn kD Constant
+    /// @param turnCap turn cap setting for the total error
+    
     void setPIDConstants(float xkP, float xkI, float xkD, int xCap,
                          float ykP, float ykI, float ykD, int yCap,
                          float turnkP, float turnkI, float turnkD, int turnCap);
 
+    /// Constructor for the class \ref autonomousControl.
+    ///
+    /// This constructor will create an instance of the class \ref autonomousControl.
+    /// It will save a pointer to an \ref robotChasis object for acutating the motors.
+    /// It will save a pointer to an \ref odometry object for reading postion and feedback controls.
+    /// @param *robot Pointer of an \ref robotChasis object.
+    /// @param *tr Pointer of an \ref odometry object.
     autonomousControl(robotChasis *robot, odometry *tr);
 
   private:
