@@ -9,7 +9,7 @@
 #include "vex.h"
 
 using namespace vex;
-robotChasis simp = robotChasis(2.75, 5.65, 5.65, 5.25);
+robotChasis simp = robotChasis(2.75, 5.5, 5.5, 5.2);
 odometry tracker = odometry(&simp, 0, 0, 0);
 autonomousControl autoChasis = autonomousControl(&simp, &tracker);
 autonomousRoutine autoRoutine = autonomousRoutine(&autoChasis);
@@ -41,7 +41,7 @@ void opControl(){
 
 void autonM(){
   simp.gyroM.resetRotation();
-  autoRoutine.run(ODOMETRYONLY);
+  autoRoutine.run(TEST);
 }
 
 void disabledR(){

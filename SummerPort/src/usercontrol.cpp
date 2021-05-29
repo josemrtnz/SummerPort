@@ -1,6 +1,6 @@
 #include "usercontrol.h"
-#define TURN_SENSITIVITY .6
-#define MOVE_SENSITIVITY .8
+#define TURN_SENSITIVITY 1.0
+#define MOVE_SENSITIVITY 1.0
 userControl::userControl(robotChasis *robot, bool dM){
   simp = robot;
   driverMode = dM;

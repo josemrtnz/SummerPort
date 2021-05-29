@@ -69,10 +69,10 @@ class robotChasis{
     motor frontLeft = motor(PORT8, ratio18_1, true);
 
     /// Back Left Motor Instance
-    motor backLeft = motor(PORT18, ratio18_1, false);
+    motor backLeft = motor(PORT1, ratio18_1, true);
 
     /// Back Right Motor Instance
-    motor backRight = motor(PORT10, ratio18_1, false);
+    motor backRight = motor(PORT11, ratio18_1, true);
 
     /// Left Intake Motor Instance
     motor leftIntake = motor(PORT15, ratio36_1, true);
@@ -84,19 +84,19 @@ class robotChasis{
     motor flyOuttake = motor(PORT14, ratio36_1, true);
 
     /// Roller Motor Instance
-    motor rollerIntake = motor(PORT11, ratio36_1, true);
+    motor rollerIntake = motor(PORT10, ratio36_1, true);
 
     //encoder leftTracker = encoder(Brain.ThreeWirePort.E);
     //encoder rightTracker = encoder(Brain.ThreeWirePort.A);
     //encoder backTracker = encoder(Brain.ThreeWirePort.C);
     /// Left Tracker Rotation Sensor Instance
-    rotation leftTracker = rotation(PORT17, false);
+    rotation leftTracker = rotation(PORT19, true);
 
     /// Right Tracker Rotation Sensor Instance
-    rotation rightTracker = rotation(PORT5, true);
+    rotation rightTracker = rotation(PORT20, false);
 
     /// Back Tracker Rotation Sensor Instance
-    rotation backTracker = rotation(PORT4, false);
+    rotation backTracker = rotation(PORT18, false);
     
     /// Limit Switch Sensor Instance
     limit shootD = limit(Brain.ThreeWirePort.H);
