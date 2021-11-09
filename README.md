@@ -30,7 +30,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 * **Daniel Castellon** - *Programmer/CameraMan* [Turtlewax32](https://github.com/Turtlewax32)
 * **Daniel Castellon** - *Programmer/CameraMan* [Turtlewax32](https://github.com/mgomez1910)
 * **Matthew Gomez** - *Programmer* [mgomez1910](https://github.com/Turtlewax32)
->>>>>>> GUCCI
+>>>>>>> 
 
 See also the list of [contributors](https://github.com/josemrtnz/SummerPort/graphs/contributors) who participated in this project.
 
