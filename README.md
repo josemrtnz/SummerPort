@@ -17,11 +17,8 @@ The goals for this summer are as follows:
 
 ## Built With
 
-* [VEXCode Pro](https://link.vex.com/vexcode-v5text-windows) - IDE and Compiler
+* [VEXCode Pro](https://link.vex.com/vexcode-v5text-windows) - IDE and Compiler using C++
 
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
 ## Authors
 
