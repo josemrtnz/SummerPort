@@ -19,6 +19,9 @@ The goals for this summer are as follows:
 
 * [VEXCode Pro](https://link.vex.com/vexcode-v5text-windows) - IDE and Compiler using C++
 
+## Movement Demo
+
+* [Holonomic Drive Video Demonstration](https://drive.google.com/file/d/1vJ76zx1vZNtZo8W7cN81gcUs-rMiumU9/view?usp=sharing)
 
 ## Authors
 
