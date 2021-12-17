@@ -36,7 +36,7 @@ See also the list of [contributors](https://github.com/josemrtnz/SummerPort/grap
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+N/A
 
 ## Acknowledgments
 
